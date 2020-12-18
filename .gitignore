@@ -1,0 +1,10 @@
+*.png
+*.gif
+*.docx
+*.asv
+*.mat
+*.tif
+*.zip
+*.fig
+*.csv
+/out
