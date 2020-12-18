@@ -1,4 +1,6 @@
-function [width, center, peakLeftEdge, peakRightEdge] = frac_width(x,y,widthFraction,options)
+function [width, center, peakLeftEdge, peakRightEdge] = fracWidth(x,y,widthFraction,options)
+% FRACWIDTHS takes in an x and y vector, and outputs the width (relative to
+% x) at which y takes values widthFraction*y on either side of a peak.
 
     arguments
         x 

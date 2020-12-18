@@ -59,7 +59,7 @@ if ~rdclass(RunDatas)
 end
 
 for j = 1:length(RunDatas)
-    [density{j}, varied_var_values{j}, ywidths{j}] = avg_repeats(RunDatas{j}, varied_variable_name);
+    [density{j}, varied_var_values{j}, ywidths{j}] = avgRepeats(RunDatas{j}, varied_variable_name);
     depth1064{j} = unique( arrayfun( @(x) x.vars.VVA1064_Er, RunDatas{j}.Atomdata ));
 end
 
@@ -72,7 +72,7 @@ for j = 1:length(RunDatas)
     X{j} = 1:size( density{j},2 ) * xConvert;
     
     for ii = 1:size(density{j},1)
-       widths{j}(ii) = frac_width( X{j}, density{j}(ii,:), options.WidthFraction);
+       widths{j}(ii) = fracWidth( X{j}, density{j}(ii,:), options.WidthFraction);
     end
     
 end

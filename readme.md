@@ -29,5 +29,10 @@ plot_title = setupPlot( width_evo_plot, RunDatas, ...
         'yLim',options.yLim,...
         'xLim',options.xLim);
 ```
+- avgRepeats averages the repeats in the provided RunData for each value of the specified varied cicero variable. Can average repeats over multiple RunDatas if provided as a cell array of RunDatas. Currently outputs averaged summedODy, varied_variable_values, and yWidths (SD of gaussian fit), but will later be extended to output the repeat-averaged specified cicero variable name.
 
-The GetRunData function in _data_loading requires DataManager to be on MatLab path. See 
+I've so far built a couple plotting functions based on this functionality, such as stackedExpansionPlot and widthEvolutionPlot. More will follow.
+
+The custom functions also include a few of my fitting functions that are holdovers from an older version of my analysis code. fracWidth works reasonably well (to find the width at which a function hits a fraction of its maximum value), but still chokes on noisy distributions or distributions that never reach the specified fractional value. I would not expect the rest to work well until I update them.
+
+The GetRunData function in _data_loading requires dataManager to be on MatLab path. See [the dataManager GitHub](https://github.com/weldlabucsb/dataManager) to get dataManager and to read about how it works.

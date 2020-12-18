@@ -1,4 +1,4 @@
-function [density, varied_var_values, ywidths]  = avg_repeats(RunDatas, varied_variable_name)
+function [density, varied_var_values, ywidths]  = avgRepeats(RunDatas, varied_variable_name)
 % AVG_REPEATS averages the repeats over the provided RunDatas.Atomdata
 % Provide the varied_variable_name as a string corresponding to a variable
 % in RunDatas.Atomdata.vars.(varied_variable_name).

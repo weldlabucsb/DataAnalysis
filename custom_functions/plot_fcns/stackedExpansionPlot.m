@@ -50,7 +50,7 @@ end
     
     %% Avg Atomdata entries for same varied_variable_value
     
-    [density, varied_var_values]  = avg_repeats(RunDatas, varied_variable_name);
+    [density, varied_var_values]  = avgRepeats(RunDatas, varied_variable_name);
     
     %% Make the Plot
     
