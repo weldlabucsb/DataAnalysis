@@ -117,7 +117,7 @@ for ii = 1:length(depth1064)
 end
 options.LegendLabels = labels;
 
-figname = setupPlot( width_evo_plot, RunDatas, ...
+plot_title = setupPlot( width_evo_plot, RunDatas, ...
         'FracWidth', varied_variable_name, ...
         varargin, ...
         'yLabel', options.yLabel, ...
@@ -135,13 +135,6 @@ figname = setupPlot( width_evo_plot, RunDatas, ...
         'yLim',options.yLim,...
         'xLim',options.xLim);
 
-for j = 1:length(figname)
-   if j == 1
-       figure_filename = figname{j};
-   else
-       figure_filename = strcat( figure_filename, ", ", figname{j});
-   end
-   figure_filename = strcat(figure_filename,".png");
-end
+figure_filename = filenameFromPlotTitle(plot_title);
 
 end
