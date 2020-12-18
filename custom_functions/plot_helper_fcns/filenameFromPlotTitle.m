@@ -22,10 +22,12 @@ arguments
    options.FileType string = ".png"
 end
 
+% gets rid of comma delimiter if replacing spaces (looks better)
 if options.ReplaceSpaces
    options.Delimiter = " "; 
 end
 
+% builds the title from the cells
 for j = 1:length(plot_title)
     if j == 1
         figure_filename = plot_title{j};
@@ -34,8 +36,10 @@ for j = 1:length(plot_title)
     end
 end
 
+% tacks on the filetype extension
 figure_filename = strcat(figure_filename,options.FileType);
 
+% swaps out spaces if specified
 if options.ReplaceSpaces
     figure_filename = strrep( figure_filename, " ", options.ReplaceSpacesWith );
 end
