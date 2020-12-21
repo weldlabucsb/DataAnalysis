@@ -80,7 +80,7 @@ end
 
 for j = 1:length(RunDatas)
     
-    X{j} = 1:size( avg_ads{j}(1).(plottedDensity),2 ) * xConvert;
+    X{j} = ( 1:size( avg_ads{j}(1).(plottedDensity),2 ) ) * xConvert;
     
     for ii = 1:size(avg_ads{j},2)
        widths{j}(ii) = fracWidth( X{j}, avg_ads{j}(ii).(plottedDensity), options.WidthFraction);

@@ -17,8 +17,10 @@ end
 % heldvars_all = {'LatticeHold','TOF'};
 
 % LatticeHold Runs
+% condition = {'RunID', '12_09', 'RunNumber', ...
+%     makeRunNumberList([23 24 26 27 29 30 32:41])};
 condition = {'RunID', '12_09', 'RunNumber', ...
-    makeRunNumberList([23 24 26 27 29 30 32:41])};
+    makeRunNumberList([25 28 31 32:41])};
 varied_var = 'LatticeHold';
 heldvars_each = {'VVA915_Er','VVA1064_Er'};
 heldvars_all = {};
