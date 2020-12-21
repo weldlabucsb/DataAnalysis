@@ -10,8 +10,18 @@ end
 
 %% Sort the Data
 
-condition = {'RunID','12_14','RunNumber',{'27' '28' '29' '30' '31' '32' }}; % Disorder Runs
-condition = {'RunID',
+% Disorder Runs
+% condition = {'RunID','12_14','RunNumber',{'27' '28' '29' '30' '31' '32'}};
+% varied_var = 'VVA915_Er';
+% heldvars_each = {'LatticeHold','TOF','VVA1064_Er'};
+% heldvars_all = {'LatticeHold','TOF'};
+
+% LatticeHold Runs
+condition = {'RunID', '12_09', 'RunNumber', ...
+    makeRunNumberList([23 24 26 27 29 30 32:41])};
+varied_var = 'LatticeHold';
+heldvars_each = {'VVA915_Er','VVA1064_Er'};
+heldvars_all = {};
 
 Data = RunDataLibrary();
 Data = Data.libraryConstruct(DATA,condition);
@@ -27,13 +37,14 @@ runDatas = Data.RunDatas;
 %%
 
 for j = 1:length(runDatas)
-    [expansion_plot{j}, expansion_plot_filename{j}] = stackedExpansionPlot(runDatas{j},1,'VVA915_Er','LatticeHold','VVA1064_Er',...
+    [expansion_plot{j}, expansion_plot_filename{j}] = stackedExpansionPlot(runDatas{j},1,...
+        varied_var,heldvars_each,...
         'PlottedDensity','summedODy');
 end
 
-[width_evo_plot, width_evo_filename] = widthEvolutionPlot(runDatas,'VVA915_Er','LatticeHold',...
-    'VVA1064_Er','TOF',...
-    'WidthFraction',0.5,...
+[width_evo_plot, width_evo_filename] = widthEvolutionPlot(runDatas,...
+    varied_var,heldvars_all,...
+    'WidthFraction',0.75,...
     'IncludeSDPlot',1,...
     'PlottedDensity','summedODy',...
     'yLim',[0,200]);

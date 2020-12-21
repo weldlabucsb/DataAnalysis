@@ -103,8 +103,8 @@ function [avg_atomdata, varied_var_values]  = avgRepeats(RunDatas, varied_variab
         if size([raw_atomdata.(varnames{j})],2) ~= N_raw
             for ii = 1:N
                 this_varvar = varied_var_values(ii);
-                thisprofile = [sort_raw_atomdata(varied_var_raw == this_varvar).(varnames{j})]; 
-                thisprofile = mean(thisprofile,1); 
+                theseprofiles = {sort_raw_atomdata(varied_var_raw == this_varvar).(varnames{j})}; 
+                thisprofile = cellmean(theseprofiles); 
                 avg_atomdata(ii).(varnames{j}) = thisprofile;
             end
         end

@@ -58,7 +58,7 @@ end
 %% VargHandling
 
 if ~isempty(varargin)
-    pass_vargs = varargin{1};
+    pass_vargs = varargin{1}{1};
 else
     pass_vargs = {};
 end

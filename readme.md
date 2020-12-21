@@ -3,7 +3,7 @@
 The idea was to package together a bunch of functions that make building plots and analyzing data from RunDatas much easier. Includes a tool (GetRunDatas) for streamlining pulling a RunDataLibrary from a datatable.csv using DataManager.
 
 Useful functions:
-- plotTitle: takes in a RunData object or a cell array of RunData objects, and outputs a multi-line plotTitle. First line specifies the dependent variable being plotted and the varied variable (a cicero variable). Optionally adds a line of cicero variables that were held constant and their values. Next line specifies the dates and run numbers that were present in the provided RunData(s). Function outputs a cell array of strings which can be passed to title().
+- plotTitle: takes in a RunData object or a cell array of RunData objects, and outputs a multi-line plotTitle. First line specifies the dependent variable being plotted and the varied variable (a cicero variable). Varargs (cell array of cicero variable names (strings)) optionally adds a line of cicero variables that were held constant and their values. Next line specifies the dates and run numbers that were present in the provided RunData(s). Function outputs title as a cell array of strings which can be passed to title().
 
 - filenameFromPlotTitle: takes in cell array (of strings) output from plotTitle and outputs a .png filename which can be used to save the figure.
 

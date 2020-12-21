@@ -22,9 +22,9 @@ end
 
 %% Get Folder, Date for Run
 
-if ~isempty(varargin) && ~isempty(varargin{1})
+if ~isempty(varargin{1})
     held_var_flag = 1;
-    for ii = 1:length(varargin)
+    for ii = 1:length(varargin{1})
         held_var_name(ii) = string(varargin{1}{ii});
         [~,held_var_value(ii)] = determineIfHeldVarConstant(RunDatas,held_var_name(ii));
         if ii == 1
