@@ -11,6 +11,9 @@ arguments (Repeating)
     varargin
 end
 arguments
+    %
+    options.PlottedDensity = "summedODy"
+    %
     options.IncludeSDPlot (1,1) logical = 0
     %
     options.WidthFraction (1,1) double = 0.5
@@ -45,6 +48,15 @@ arguments
 end
 
 options.yLabel = strcat("Width at ", num2str(options.WidthFraction), " of Max Density");
+%%
+
+plottedDensity = options.PlottedDensity;
+
+if plottedDensity == "summedODy"
+    SD = 'cloudSD_y';
+elseif plottedDensity == "summedODx"
+    SD = 'cloudSD_x';
+end
 
 %% Camera Params
 
@@ -60,7 +72,7 @@ end
 
 for j = 1:length(RunDatas)
     [avg_ads{j}, varied_var_values{j}] = avgRepeats(...
-        RunDatas{j}, varied_variable_name,'summedODy','cloudSD_y');
+        RunDatas{j}, varied_variable_name, plottedDensity, SD);
     depth1064{j} = unique( arrayfun( @(x) x.vars.VVA1064_Er, RunDatas{j}.Atomdata ));
 end
 
@@ -68,10 +80,10 @@ end
 
 for j = 1:length(RunDatas)
     
-    X{j} = 1:size( avg_ads{j}(1).summedODy,2 ) * xConvert;
+    X{j} = 1:size( avg_ads{j}(1).(plottedDensity),2 ) * xConvert;
     
     for ii = 1:size(avg_ads{j},2)
-       widths{j}(ii) = fracWidth( X{j}, avg_ads{j}(ii).summedODy, options.WidthFraction);
+       widths{j}(ii) = fracWidth( X{j}, avg_ads{j}(ii).(plottedDensity), options.WidthFraction);
     end
     
 end
@@ -91,7 +103,7 @@ for j = 1:length(RunDatas)
     hold on;
     
     if options.IncludeSDPlot
-        plot( varied_var_values{j}, [avg_ads{j}.cloudSD_y]*1e6 , '--',...
+        plot( varied_var_values{j}, [avg_ads{j}.(SD)]*1e6 , '--',...
         'LineWidth', options.LineWidth,...
         'Color',cmap(j,:));
     end
@@ -117,7 +129,8 @@ end
 options.LegendLabels = labels;
 
 plot_title = setupPlot( width_evo_plot, RunDatas, ...
-        'FracWidth', varied_variable_name, ...
+        strcat('FracWidth (',options.PlottedDensity,')'), ...
+        varied_variable_name, ...
         varargin, ...
         'yLabel', options.yLabel, ...
         'yUnits', options.yUnits, ...
