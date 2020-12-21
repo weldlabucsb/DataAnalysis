@@ -1,4 +1,4 @@
-function expansion_plot = stackedExpansionPlot(RunDatas,offset_tag,varied_variable_name,varargin,options)
+function [expansion_plot, figure_filename] = stackedExpansionPlot(RunDatas,offset_tag,varied_variable_name,varargin,options)
 % STACKEDEXPANSIONPLOT  Generate stacked expansion plot from avg'd
 % RunDatas.
 %
@@ -17,6 +17,8 @@ arguments (Repeating)
     varargin
 end
 arguments
+    options.PlottedDensity = "summedODy"
+    %
     options.yLabel string = "Density"
     options.yUnits string = "(a.u.)"
     %
@@ -31,7 +33,7 @@ arguments
     %
     options.LegendLabels = []
     options.LegendTitle string = varied_variable_name
-    options.Position (1,4) double = [0, 0, 1280, 720];
+    options.Position (1,4) double = [53, 183, 1331, 829];
     %
     options.PlotTitle = ""
     %
@@ -50,7 +52,13 @@ end
     
     %% Avg Atomdata entries for same varied_variable_value
     
-    [density, varied_var_values]  = avgRepeats(RunDatas, varied_variable_name);
+%     [density, varied_var_values]  = avgRepeats(RunDatas, varied_variable_name);
+    [ad, varied_var_values] = avgRepeats(...
+        RunDatas, varied_variable_name,options.PlottedDensity);
+    
+    for ii = 1:length(ad)
+       density(ii,:) = [ad(ii).(options.PlottedDensity)]; 
+    end
     
     %% Make the Plot
     
@@ -93,8 +101,8 @@ end
 
     %% Setup Plot
     
-    setupPlot( expansion_plot, RunDatas, ...
-        'Density', varied_variable_name, ...
+    plot_title = setupPlot( expansion_plot, RunDatas, ...
+        options.PlottedDensity, varied_variable_name, ...
         varargin, ...
         'LegendLabels', labels, ...
         'yLabel', options.yLabel, ...
@@ -109,5 +117,7 @@ end
         'PlotTitle', options.PlotTitle,...
         'yLim',options.yLim,...
         'xLim',options.xLim);
+    
+    figure_filename = filenameFromPlotTitle(plot_title);
     
 end

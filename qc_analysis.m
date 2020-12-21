@@ -1,12 +1,10 @@
 %% Define things
 
-analysis_output_dir = "G:\My Drive\_WeldLab\Code\Analysis\_DataAnalysis\_out";
-
 %% Get the Data
 
 data_dir = 'G:\My Drive\_WeldLab\Code\Analysis\_DataAnalysis\_data_loading\Data\';
 if ~exist('DATA','var')
-    load([data_dir 'Data_18-Dec-2020.mat']);
+    load([data_dir filesep 'Data_18-Dec-2020.mat']);
     DATA = Data;
 end
 
@@ -27,9 +25,10 @@ runDatas = Data.RunDatas;
 
 %%
 
-% for j = 1:length(runDatas)
-%     stackedExpansionPlot(runDatas{j},1,'VVA915_Er','LatticeHold','VVA1064_Er');
-% end
+for j = 1:length(runDatas)
+    [expansion_plot{j}, expansion_plot_filename{j}] = stackedExpansionPlot(runDatas{j},1,'VVA915_Er','LatticeHold','VVA1064_Er',...
+        'PlottedDensity','summedODx');
+end
 
 [width_evo_plot, width_evo_filename] = widthEvolutionPlot(runDatas,'VVA915_Er','LatticeHold',...
     'VVA1064_Er','TOF',...
@@ -37,8 +36,14 @@ runDatas = Data.RunDatas;
     'IncludeSDPlot',1,...
     'yLim',[0,200]);
 
-saveas(width_evo_plot, fullfile(analysis_output_dir,width_evo_filename));
+%% Save the Figures
 
-%%
+analysis_output_dir = "G:\My Drive\_WeldLab\Code\Analysis\_DataAnalysis\_out";
+expansion_plot_dir = strcat( analysis_output_dir, filesep, "expansion_plots");
+
+save_figure(expansion_plot, expansion_plot_filename, expansion_plot_dir);
+save_figure(width_evo_plot, width_evo_filename, analysis_output_dir);
+
+%% Open the Ouput Directory
 
 winopen(analysis_output_dir);

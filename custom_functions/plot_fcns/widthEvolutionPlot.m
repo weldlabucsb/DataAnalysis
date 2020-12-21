@@ -62,9 +62,6 @@ for j = 1:length(RunDatas)
     [avg_ads{j}, varied_var_values{j}] = avgRepeats(...
         RunDatas{j}, varied_variable_name,'summedODy','cloudSD_y');
     depth1064{j} = unique( arrayfun( @(x) x.vars.VVA1064_Er, RunDatas{j}.Atomdata ));
-%     for k = 1:length(avg_ads{j})
-%         density{j}(k,:) = [avg_ads{j}(k).summedODy];
-%     end
 end
 
 %% Compute Widths
