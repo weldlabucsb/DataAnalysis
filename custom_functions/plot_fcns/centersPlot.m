@@ -40,8 +40,9 @@ arguments
     options.xLim (1,2) double = [0,0]
     options.yLim (1,2) double = [0,0]
     %
-    options.PlotPadding = 0;
+    options.PlotPadding = 0
     %
+    options.PiezoFreqTag = 1
 end
 
 plottedDensity = options.PlottedDensity;
@@ -52,6 +53,8 @@ if varied_variable_name ~= "VVA915_Er"
 else
     add_915_tag = 0;
 end
+
+add_piezo_freq_tag = options.PiezoFreqTag;
 
 %% Camera Params
 
@@ -70,6 +73,7 @@ for j = 1:length(RunDatas)
         RunDatas{j}, varied_variable_name, plottedDensity);
     depth1064{j} = unique( arrayfun( @(x) x.vars.VVA1064_Er, RunDatas{j}.Atomdata ));
     depth915{j} = unique( arrayfun( @(x) x.vars.VVA915_Er, RunDatas{j}.Atomdata )); 
+    piezomodfreq{j} = unique( arrayfun( @(x) x.vars.PiezoModFreq, RunDatas{j}.Atomdata )); 
 end
 
 %% Compute Widths
@@ -113,10 +117,16 @@ for ii = 1:length(depth1064)
         if add_915_tag
             labels(ii) = strcat(labels(ii), "-", string(depth915(ii)));
         end
+        if add_piezo_freq_tag
+            labels(ii) = strcat(labels(ii), ", ", string(piezomodfreq(ii)));
+        end
     else
         labels = [labels; strcat(RunDatas{ii}.RunNumber, ": ", string( depth1064(ii) ))];
         if add_915_tag
             labels(ii) = strcat(labels(ii), "-", string(depth915(ii)));
+        end
+        if add_piezo_freq_tag
+            labels(ii) = strcat(labels(ii), ", ", string(piezomodfreq(ii)));
         end
     end
 end

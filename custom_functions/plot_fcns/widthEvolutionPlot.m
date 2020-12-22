@@ -1,11 +1,16 @@
-function [width_evo_plot,figure_filename] = widthEvolutionPlot(RunDatas,varied_variable_name,varargin,options)
+function [width_evo_plot,figure_filename] = widthEvolutionPlot(RunDatas,varied_variable_name,legendvars,varargin,options)
 % WIDTHEVOLUTIONPLOT makes a plot of how the width of the evolution evolves
 % with respect to {varied_variable_name}. Inherits optional arguments from
 % setupPlot.
+%
+% legendvars must be specified as a cell array of strings. The names of
+% the variables are used as the title of the legend, and their values for
+% each plotted RunData are 
 
 arguments
     RunDatas
     varied_variable_name
+    legendvars
 end
 arguments (Repeating)
     varargin
@@ -47,6 +52,7 @@ arguments
     %
     options.PlotPadding = 0;
     %
+    options.PiezoFreqTag = 1;
 end
 
 options.yLabel = strcat("Width at ", num2str(options.WidthFraction), " of Max Density");
@@ -67,6 +73,14 @@ else
     add_915_tag = 0;
 end
 
+add_piezo_freq_tag = options.PiezoFreqTag;
+% if any(contains(string(varargin),"PiezoModFreq"))
+%     options.LegendTitle = "1064-915, Piezo";
+%     add_piezo_freq_tag = 1;
+% else
+%     add_piezo_freq_tag = 0;
+% end
+
 %% Camera Params
 
 % requires paramsfnc (found in StrontiumData/ImageAnalysisSoftware/v6/)
@@ -82,8 +96,13 @@ end
 for j = 1:length(RunDatas)
     [avg_ads{j}, varied_var_values{j}] = avgRepeats(...
         RunDatas{j}, varied_variable_name, plottedDensity, SD);
-    depth1064{j} = unique( arrayfun( @(x) x.vars.VVA1064_Er, RunDatas{j}.Atomdata ));
-    depth915{j} = unique( arrayfun( @(x) x.vars.VVA915_Er, RunDatas{j}.Atomdata )); 
+    
+    for k = 1:length(legendvars)
+        legendvars{k}{j} = unique( arrayfun( @(x) x.vars.VVA1064_Er, RunDatas{j}.Atomdata ));
+    
+        depth1064{j} = unique( arrayfun( @(x) x.vars.VVA1064_Er, RunDatas{j}.Atomdata ));
+        depth915{j} = unique( arrayfun( @(x) x.vars.VVA915_Er, RunDatas{j}.Atomdata )); 
+        piezomodfreq{j} = unique( arrayfun( @(x) x.vars.PiezoModFreq, RunDatas{j}.Atomdata )); 
 end
 
 %% Compute Widths
@@ -133,10 +152,16 @@ for ii = 1:length(depth1064)
         if add_915_tag
             labels(ii) = strcat(labels(ii), "-", string(depth915(ii)));
         end
+        if add_piezo_freq_tag
+            labels(ii) = strcat(labels(ii), ", ", string(piezomodfreq(ii)));
+        end
     else
         labels = [labels; strcat(RunDatas{ii}.RunNumber, ": ", string( depth1064(ii) ))];
         if add_915_tag
             labels(ii) = strcat(labels(ii), "-", string(depth915(ii)));
+        end
+        if add_piezo_freq_tag
+            labels(ii) = strcat(labels(ii), ", ", string(piezomodfreq(ii)));
         end
     end
     
@@ -144,6 +169,9 @@ for ii = 1:length(depth1064)
         labels = [labels; strcat("SD: ", string( depth1064(ii) ))];
         if add_915_tag
             labels(ii) = strcat(labels(ii), "-", string(depth915(ii)));
+        end
+        if add_piezo_freq_tag
+            labels(ii) = strcat(labels(ii), ", ", string(piezomodfreq(ii)));
         end
     end
 end

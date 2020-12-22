@@ -32,7 +32,10 @@ end
 condition = {'RunID', '12_15', 'RunNumber',...
     makeRunNumberList([32:37])};
 varied_var = 'LatticeHold';
-heldvars_each = 'PiezoModFreq';
+heldvars_each = {'PiezoModFreq'};
+heldvars_all = {};
+piezo_freq_tag = 1;
+widthYLim = [0,400];
 
 % condition = {'RunID', '12_16', 'RunNumber',...
 %     makeRunNumberList([9:16])};
@@ -46,12 +49,7 @@ Data = RunDataLibrary();
 Data = Data.libraryConstruct(DATA,condition);
 runDatas = Data.RunDatas;
 
-%% Get data subset
-
-% runNumber = 32;
-%
-% idx = contains(Data.RunIDs,['Run-' num2str(runNumber)]);
-% runData = Data.RunDatas{idx};
+%% 
 
 %%
 
@@ -68,8 +66,9 @@ end
     'WidthFraction',0.3,...
     'IncludeSDPlot',0,...
     'PlottedDensity','summedODy',...
-    'yLim',[0,200],...
-    'SmoothWindow',10);
+    'yLim',widthYLim,...
+    'SmoothWindow',10,...
+    'PiezoFreqTag',piezo_freq_tag);
 
 %%
 
