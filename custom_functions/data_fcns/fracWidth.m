@@ -7,6 +7,9 @@ function [width, center, peakLeftEdge, peakRightEdge] = fracWidth(x,y,widthFract
 %
 % If options.PlotWidth (logical), plots a horizontal line to visualize the
 % fractional width.
+%
+% If options.SmoothWindow = w (double) is specified, data will be smoothed
+% (moving mean) over w datapoints before computing fracWidth.
 
     arguments
         x 
@@ -17,7 +20,10 @@ function [width, center, peakLeftEdge, peakRightEdge] = fracWidth(x,y,widthFract
         options.PeakRadius (1,1) = 1
         options.PlotWidth (1,1) logical = 0
         options.Position (1,4) double = [-1078, -206, 1078, 854];
+        options.SmoothWindow (1,1) double = 1
     end
+    
+    y = movmean(y,options.SmoothWindow);
     
     radius = options.PeakRadius;
     [peakValue, knownIndex] = averageAroundMaximum(x,y,radius);
@@ -39,16 +45,17 @@ function [width, center, peakLeftEdge, peakRightEdge] = fracWidth(x,y,widthFract
     edgevals = edges(edges ~= 0);
 
     if edgevals(1) == -1
-        leftedges = [1; leftedges];
+        leftedges = [1, leftedges];
     end
 
     if edgevals(end) == 1
-        rightedges = [rightedges; length(logic)];
+        rightedges = [rightedges, length(logic)];
     end
 
     for n = 1:length(leftedges)
         blockN = [leftedges(n):rightedges(n)];
-        if sum( blockN == knownIndex ) == 1
+        % find the block that contains the center
+        if sum( blockN == knownIndex ) == 1  
             peakLeftEdge = x( blockN(1) );
             peakRightEdge = x( blockN(end));
         end
