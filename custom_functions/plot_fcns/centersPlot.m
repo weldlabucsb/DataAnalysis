@@ -1,7 +1,4 @@
-function [width_evo_plot,figure_filename] = widthEvolutionPlot(RunDatas,varied_variable_name,varargin,options)
-% WIDTHEVOLUTIONPLOT makes a plot of how the width of the evolution evolves
-% with respect to {varied_variable_name}. Inherits optional arguments from
-% setupPlot.
+function [centers_plot, centers_plot_filename] = centersPlot(RunDatas,varied_variable_name,varargin,options)
 
 arguments
     RunDatas
@@ -49,16 +46,7 @@ arguments
     %
 end
 
-options.yLabel = strcat("Width at ", num2str(options.WidthFraction), " of Max Density");
-%%
-
 plottedDensity = options.PlottedDensity;
-
-if plottedDensity == "summedODy"
-    SD = 'cloudSD_y';
-elseif plottedDensity == "summedODx"
-    SD = 'cloudSD_x';
-end
 
 if varied_variable_name ~= "VVA915_Er"
     options.LegendTitle = "1064-915 Depth (Er)";
@@ -93,7 +81,7 @@ for j = 1:length(RunDatas)
     X{j} = ( 1:size( avg_ads{j}(1).(plottedDensity),2 ) ) * xConvert;
     
     for ii = 1:size(avg_ads{j},2)
-       widths{j}(ii) = fracWidth( X{j}, avg_ads{j}(ii).(plottedDensity), options.WidthFraction, ...
+       [widths{j}(ii), center{j}(ii)] = fracWidth( X{j}, avg_ads{j}(ii).(plottedDensity), options.WidthFraction, ...
            'PeakRadius',5,'SmoothWindow',5);
     end
     
@@ -172,24 +160,3 @@ plot_title = setupPlot( width_evo_plot, RunDatas, ...
 figure_filename = filenameFromPlotTitle(plot_title);
 
 end
-
-% for ii = 1:length(depth1064)
-%     if ii == 1
-%         labels = [strcat("Frac: ", string( depth1064(ii) ))];
-%         if add_915_tag
-%             labels(ii) = strcat(labels(ii), "-", string(depth915(ii)));
-%         end
-%     else
-%         labels = [labels; strcat("Frac: ", string( depth1064(ii) ))];
-%         if add_915_tag
-%             labels(ii) = strcat(labels(ii), "-", string(depth915(ii)));
-%         end
-%     end
-%     
-%     if options.IncludeSDPlot
-%         labels = [labels; strcat("SD: ", string( depth1064(ii) ))];
-%         if add_915_tag
-%             labels(ii) = strcat(labels(ii), "-", string(depth915(ii)));
-%         end
-%     end
-% end
