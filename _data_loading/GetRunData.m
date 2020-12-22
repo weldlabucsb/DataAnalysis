@@ -24,7 +24,7 @@ arguments
     % options.DataDir = 'X:\StrontiumData';
     options.DataLibraryDescription string = ['Data pulled on ' date]
     options.DataFileName string = ['Data_' date '.mat']
-    options.ncVars = {}
+    options.ncVars = {};
     options.includeVars = {'VVA1064_Er','VVA915_Er','LatticeHold'};
     options.excludeVars = {'IterationCount','IterationNum','ImageTime','LogTime'};
     options.OpenOutputFolder (1,1) logical = 0
