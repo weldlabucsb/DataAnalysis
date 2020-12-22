@@ -1,4 +1,4 @@
-function [centers_plot, centers_plot_filename] = centersPlot(RunDatas,varied_variable_name,varargin,options)
+function [centers_plot, figure_filename] = centersPlot(RunDatas,varied_variable_name,varargin,options)
 
 arguments
     RunDatas
@@ -13,15 +13,13 @@ arguments
     %
     options.PlottedDensity = "summedODy"
     %
-    options.IncludeSDPlot (1,1) logical = 0
-    %
     options.WidthFraction (1,1) double = 0.5
     %
     options.LineWidth (1,1) double = 1.5
     %
     %
     %
-    options.yLabel string
+    options.yLabel string = ""
     options.yUnits string = ""
     %
     options.xLabel string = varied_variable_name
@@ -69,7 +67,7 @@ end
 
 for j = 1:length(RunDatas)
     [avg_ads{j}, varied_var_values{j}] = avgRepeats(...
-        RunDatas{j}, varied_variable_name, plottedDensity, SD);
+        RunDatas{j}, varied_variable_name, plottedDensity);
     depth1064{j} = unique( arrayfun( @(x) x.vars.VVA1064_Er, RunDatas{j}.Atomdata ));
     depth915{j} = unique( arrayfun( @(x) x.vars.VVA915_Er, RunDatas{j}.Atomdata )); 
 end
@@ -89,23 +87,17 @@ end
 
 %% Make Figure
 
-width_evo_plot = figure();
+centers_plot = figure();
 
 cmap = colormap( jet( length(RunDatas)));
 
 for j = 1:length(RunDatas)
    
-    plot( varied_var_values{j}, widths{j} , 'o-',...
+    plot( varied_var_values{j}, center{j} , 'o-',...
         'LineWidth', options.LineWidth,...
         'Color',cmap(j,:));
     
     hold on;
-    
-    if options.IncludeSDPlot
-        plot( varied_var_values{j}, [avg_ads{j}.(SD)]*1e6 , '--',...
-        'LineWidth', options.LineWidth,...
-        'Color',cmap(j,:));
-    end
     
 end
 
@@ -127,19 +119,12 @@ for ii = 1:length(depth1064)
             labels(ii) = strcat(labels(ii), "-", string(depth915(ii)));
         end
     end
-    
-    if options.IncludeSDPlot
-        labels = [labels; strcat("SD: ", string( depth1064(ii) ))];
-        if add_915_tag
-            labels(ii) = strcat(labels(ii), "-", string(depth915(ii)));
-        end
-    end
 end
 
 options.LegendLabels = labels;
 
-plot_title = setupPlot( width_evo_plot, RunDatas, ...
-        strcat('FracWidth (',options.PlottedDensity,')'), ...
+plot_title = setupPlot( centers_plot, RunDatas, ...
+        strcat('Center Position (',options.PlottedDensity,')'), ...
         varied_variable_name, ...
         varargin, ...
         'yLabel', options.yLabel, ...

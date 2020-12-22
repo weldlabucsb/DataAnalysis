@@ -54,6 +54,16 @@ end
     'yLim',[0,200],...
     'SmoothWindow',10);
 
+%%
+
+[centers_plot, centers_plot_filename] = ...
+    centersPlot(runDatas,...
+    varied_var,heldvars_all,...
+    'PlottedDensity','summedODx',...
+    'yLim',[78,90],...
+    'SmoothWindow',10,...
+    'WidthFraction',0.65);
+
 %% Save the Figures
 
 analysis_output_dir = "G:\My Drive\_WeldLab\Code\Analysis\_DataAnalysis\_out";
@@ -61,6 +71,7 @@ expansion_plot_dir = strcat( analysis_output_dir, filesep, "expansion_plots");
 
 saveFigure(expansion_plot, expansion_plot_filename, expansion_plot_dir);
 saveFigure(width_evo_plot, width_evo_filename, analysis_output_dir);
+saveFigure(centers_plot, centers_plot_filename, analysis_output_dir);
 
 %% Open the Ouput Directory
 

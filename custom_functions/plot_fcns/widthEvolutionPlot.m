@@ -24,7 +24,7 @@ arguments
     %
     %
     %
-    options.yLabel string
+    options.yLabel string = ""
     options.yUnits string = ""
     %
     options.xLabel string = varied_variable_name
