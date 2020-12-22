@@ -1,6 +1,12 @@
 function [width, center, peakLeftEdge, peakRightEdge] = fracWidth(x,y,widthFraction,options)
 % FRACWIDTHS takes in an x and y vector, and outputs the width (relative to
 % x) at which y takes values widthFraction*y on either side of a peak.
+%
+% If options.PeakRadius = R is specified, averages R points around the
+% maximum peak to determine the "maximum" value for the distribution.
+%
+% If options.PlotWidth (logical), plots a horizontal line to visualize the
+% fractional width.
 
     arguments
         x 
@@ -8,14 +14,19 @@ function [width, center, peakLeftEdge, peakRightEdge] = fracWidth(x,y,widthFract
         widthFraction (1,1) double
     end
     arguments
-        options.CustomMax = max(y)
+        options.PeakRadius (1,1) = 1
+        options.PlotWidth (1,1) logical = 0
+        options.Position (1,4) double = [-1078, -206, 1078, 854];
     end
+    
+    radius = options.PeakRadius;
+    [peakValue, knownIndex] = averageAroundMaximum(x,y,radius);
 
-    peakValue = options.CustomMax - min(y);
+    peakValue = peakValue - min( y );
 
     thisFracWidthHeight = peakValue * widthFraction + min(y);
 
-    [~,knownIndex] = max(y);
+%     [~,knownIndex] = max(y);
 
     aboveFracWidthHeight = y > thisFracWidthHeight;
 
@@ -46,5 +57,21 @@ function [width, center, peakLeftEdge, peakRightEdge] = fracWidth(x,y,widthFract
     center = (peakLeftEdge + peakRightEdge)/2;
     width = peakRightEdge - peakLeftEdge;
     
+    if options.PlotWidth
+       hFrac = figure();
+       plot(x,y);
+       hold on
+       line([peakLeftEdge peakRightEdge], thisFracWidthHeight * [1 1]);
+       set(hFrac,'Position',options.Position);
+    end
+    
+    function [avgMaxValue, peakIndex, centerX] = averageAroundMaximum(x,y,radius)
+        
+        [~, peakIndex] = max(y);
+        centerX = x(peakIndex);
+        window = [(peakIndex - radius):(peakIndex + radius)];
+        avgMaxValue = mean(y(window));
+        
+    end
     
 end
