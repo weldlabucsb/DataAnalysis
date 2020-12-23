@@ -33,7 +33,7 @@ arguments
     options.Interpreter (1,1) string = "latex"
     %
     options.LegendLabels = []
-    options.LegendTitle string = varied_variable_name
+    options.LegendTitle string = ""
     options.Position (1,4) double = [53, 183, 1331, 829];
     %
     options.PlotTitle = ""

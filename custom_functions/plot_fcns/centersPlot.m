@@ -33,7 +33,7 @@ arguments
     options.Interpreter (1,1) string = "latex"
     %
     options.LegendLabels = []
-    options.LegendTitle string = "1064 Depth (Er)"
+    options.LegendTitle string = ""
     options.Position (1,4) double = [2561, 27, 1920, 963];
     %
     options.PlotTitle = ""
