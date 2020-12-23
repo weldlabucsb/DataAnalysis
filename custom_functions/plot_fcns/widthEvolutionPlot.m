@@ -66,21 +66,6 @@ elseif plottedDensity == "summedODx"
     SD = 'cloudSD_x';
 end
 
-if varied_variable_name ~= "VVA915_Er"
-    options.LegendTitle = "1064-915 Depth (Er)";
-    add_915_tag = 1;
-else
-    add_915_tag = 0;
-end
-
-add_piezo_freq_tag = options.PiezoFreqTag;
-% if any(contains(string(varargin),"PiezoModFreq"))
-%     options.LegendTitle = "1064-915, Piezo";
-%     add_piezo_freq_tag = 1;
-% else
-%     add_piezo_freq_tag = 0;
-% end
-
 %% Camera Params
 
 % requires paramsfnc (found in StrontiumData/ImageAnalysisSoftware/v6/)
@@ -98,11 +83,12 @@ for j = 1:length(RunDatas)
         RunDatas{j}, varied_variable_name, plottedDensity, SD);
     
     for k = 1:length(legendvars)
-        legendvars{k}{j} = unique( arrayfun( @(x) x.vars.VVA1064_Er, RunDatas{j}.Atomdata ));
-    
-        depth1064{j} = unique( arrayfun( @(x) x.vars.VVA1064_Er, RunDatas{j}.Atomdata ));
-        depth915{j} = unique( arrayfun( @(x) x.vars.VVA915_Er, RunDatas{j}.Atomdata )); 
-        piezomodfreq{j} = unique( arrayfun( @(x) x.vars.PiezoModFreq, RunDatas{j}.Atomdata )); 
+        if legendvars{k} ~= "PiezoModFreq"
+            legendvals{j}{k} = RunDatas{j}.vars.(legendvars{k});
+        else
+            legendvals{j}{k} = unique( arrayfun( @(x) x.vars.(legendvars{k}), RunDatas{j}.Atomdata ));
+        end
+    end
 end
 
 %% Compute Widths
@@ -144,37 +130,44 @@ hold off;
 
 %% Setup
 
-labels = [];
+options.LegendTitle = strrep(strjoin(legendvars,", "),'_','');
 
-for ii = 1:length(depth1064)
-    if ii == 1
-        labels = [strcat(RunDatas{ii}.RunNumber, ": ", string( depth1064(ii) ))];
-        if add_915_tag
-            labels(ii) = strcat(labels(ii), "-", string(depth915(ii)));
-        end
-        if add_piezo_freq_tag
-            labels(ii) = strcat(labels(ii), ", ", string(piezomodfreq(ii)));
-        end
-    else
-        labels = [labels; strcat(RunDatas{ii}.RunNumber, ": ", string( depth1064(ii) ))];
-        if add_915_tag
-            labels(ii) = strcat(labels(ii), "-", string(depth915(ii)));
-        end
-        if add_piezo_freq_tag
-            labels(ii) = strcat(labels(ii), ", ", string(piezomodfreq(ii)));
-        end
-    end
-    
-    if options.IncludeSDPlot
-        labels = [labels; strcat("SD: ", string( depth1064(ii) ))];
-        if add_915_tag
-            labels(ii) = strcat(labels(ii), "-", string(depth915(ii)));
-        end
-        if add_piezo_freq_tag
-            labels(ii) = strcat(labels(ii), ", ", string(piezomodfreq(ii)));
-        end
+for j = 1:length(RunDatas)
+    labels(j) = strcat(RunDatas{j}.RunNumber, ": ");
+    for k = 1:length(legendvars)
+        labels(j) = strcat(labels(j), num2str( legendvals{j}{k} ), ", " );
     end
 end
+
+% for ii = 1:length(depth1064)
+%     if ii == 1
+%         labels = [strcat(RunDatas{ii}.RunNumber, ": ", string( depth1064(ii) ))];
+%         if add_915_tag
+%             labels(ii) = strcat(labels(ii), "-", string(depth915(ii)));
+%         end
+%         if add_piezo_freq_tag
+%             labels(ii) = strcat(labels(ii), ", ", string(piezomodfreq(ii)));
+%         end
+%     else
+%         labels = [labels; strcat(RunDatas{ii}.RunNumber, ": ", string( depth1064(ii) ))];
+%         if add_915_tag
+%             labels(ii) = strcat(labels(ii), "-", string(depth915(ii)));
+%         end
+%         if add_piezo_freq_tag
+%             labels(ii) = strcat(labels(ii), ", ", string(piezomodfreq(ii)));
+%         end
+%     end
+%     
+%     if options.IncludeSDPlot
+%         labels = [labels; strcat("SD: ", string( depth1064(ii) ))];
+%         if add_915_tag
+%             labels(ii) = strcat(labels(ii), "-", string(depth915(ii)));
+%         end
+%         if add_piezo_freq_tag
+%             labels(ii) = strcat(labels(ii), ", ", string(piezomodfreq(ii)));
+%         end
+%     end
+% end
 
 options.LegendLabels = labels;
 

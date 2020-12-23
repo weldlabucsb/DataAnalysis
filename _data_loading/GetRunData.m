@@ -4,7 +4,7 @@ function data_output_path = GetRunData(varargin,options)
 % Can be run with one or zero arguments. If provided, argument should be
 % the path of the datatable csv. If not provided, choose from explorer. Can
 % change default directory in line 34.
-%
+% 
 % Options:
 % 1. NumColumns (double) should match the number of columns in the csv.
 % 2. DataDir (path string) the location of the experimental data (StrontiumData, LithiumData).
@@ -19,7 +19,7 @@ arguments (Repeating)
    varargin 
 end
 arguments
-    options.NumColumns (1,1) double = 7
+    options.NumColumns (1,1) double = 6
     options.DataDir = 'E:\__Data\StrontiumData'
     % options.DataDir = 'X:\StrontiumData';
     options.DataLibraryDescription string = ['Data pulled on ' date]
@@ -28,10 +28,10 @@ arguments
     options.includeVars = {'VVA1064_Er','VVA915_Er','LatticeHold'};
     options.excludeVars = {'IterationCount','IterationNum','ImageTime','LogTime'};
     options.OpenOutputFolder (1,1) logical = 0
+    options.DefaultOutputDir string = "G:\My Drive\_WeldLab\Code\Analysis\_DataAnalysis\_data_loading\Data"
 end
 
 % choose default output dir (only has effect if GetRunData run w/o first argument
-default_output_dir = "G:\My Drive\_WeldLab\Code\Analysis\_DataAnalysis\_data_loading\Data";
 % default_output_dir = pwd;
 
 % check if DataDir exists
@@ -58,7 +58,7 @@ if length(varargin) == 1
     output_dir = strjoin( l(1:end-1), filesep );
 elseif isempty(varargin)
     [infoTableName, output_dir] = uigetfile(...
-        strcat(default_output_dir,filesep,"*.csv"),...
+        strcat(options.DefaultOutputDir,filesep,"*.csv"),...
         'Select the data table CSV.');
     if infoTableName == 0
        disp('No file selected. Cancelling.');
@@ -67,9 +67,10 @@ elseif isempty(varargin)
     infoTablePath = fullfile(output_dir,infoTableName);
 end
 
+% by default, .mat is saved at location of csv
 data_output_path = fullfile(output_dir, options.DataFileName);
 
-options.NumColumns = 7; % To load the table as all strings, you must specify the number of columns.
+% To load the table as all strings, you must specify the number of columns.
 infoTable = readtable(infoTablePath,...
     'Format',repmat('%s',[1,options.NumColumns]),...
     'TextType','char',...
@@ -83,6 +84,7 @@ Data = Data.autoConstruct(...
     options.includeVars,...
     options.excludeVars);
 
+% save the data
 save(data_output_path,'Data');
 
 if options.OpenOutputFolder

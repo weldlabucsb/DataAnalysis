@@ -1,3 +1,5 @@
-function RunData = avgRepeatRunDatas(RunDatas)
+function RunData = avgRepeatRunDatas(RunDatas,varied_variable)
+
+    
 
 end
