@@ -26,7 +26,7 @@ arguments
     options.DataFileName string = ['Data_' date '.mat']
     options.ncVars = {};
     options.includeVars = {'VVA1064_Er','VVA915_Er','LatticeHold'};
-    options.excludeVars = {'IterationCount','IterationNum','ImageTime','LogTime'};
+    options.excludeVars = {'IterationCount','IterationNum','ImageTime','LogTime','PiezoModFreq'};
     options.OpenOutputFolder (1,1) logical = 0
     options.DefaultOutputDir string = "G:\My Drive\_WeldLab\Code\Analysis\_DataAnalysis\_data_loading\Data"
 end
