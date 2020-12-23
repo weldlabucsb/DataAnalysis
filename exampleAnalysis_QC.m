@@ -43,7 +43,6 @@ heldvars_each = {'VVA915_Er','VVA1064_Er'};
 legendvars_each = {varied_var};
 heldvars_all = {};
 legendvars_all = heldvars_each;
-YLim = [0,200];
 
 %%%%%%%%%%%%%%%%%%%%%%%
 %%% Slow Drive Runs %%%
@@ -83,22 +82,20 @@ Data = RunDataLibrary();
 Data = Data.libraryConstruct(DATA,condition);
 runDatas = Data.RunDatas;
 
-% This part sets a default value for this variable, since I don't always
-% know what I want my ylim to be before plotting.
-if ~exist('YLim')
-   YLim = [0,0]; % setupPlot knows to ignore this if it is [0,0]. 
-end
-
 %% Now you can call your plotfunctions!
 
 %% Stacked Expansion Plots 
 
 % Here I loop over the runDatas and make an expansion plot for each (since
 % I don't want multiple runs on each plot)
+
+% specify which density you want
+plotted_density = 'summedODy';
+
 for j = 1:length(runDatas)
     [expansion_plot{j}, expansion_plot_filename{j}] = stackedExpansionPlot(runDatas{j},1,...
         varied_var,legendvars_each,heldvars_each,...
-        'PlottedDensity','summedODx');
+        'PlottedDensity',plotted_density);
 end
 
 %% Width Evolution Plot
@@ -111,15 +108,18 @@ end
     varied_var,legendvars_all,heldvars_all,...
     'WidthFraction',0.3,...
     'PlottedDensity','summedODy',...
-    'yLim',YLim,...
+    'yLim',[0,200],...
     'SmoothWindow',10);
 
 %% Center Positions Plot
 
+% specify which density you want
+plotted_density = 'summedODx';
+
 [centers_plot, centers_plot_filename] = ...
     centersPlot(runDatas,...
     varied_var,legendvars_all,heldvars_all,...
-    'PlottedDensity','summedODx',...
+    'PlottedDensity',plotted_density,...
     'yLim',[78,90],...
     'SmoothWindow',10,...
     'WidthFraction',0.65);
