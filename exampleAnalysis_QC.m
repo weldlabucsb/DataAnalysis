@@ -15,7 +15,7 @@ end
 % Uncomment whichever chunks of data you want to look at. 
 % Uncomment only one condition.
 
-clear condition varied_var heldvars_each legendvars_each heldvars_all legendvars_each YLim
+clear condition varied_var heldvars_each legendvars_each heldvars_all legendvars_each
 
 %%%%%%%%%%%%%%%%%%%%%
 %%% Disorder Runs %%%
@@ -27,7 +27,6 @@ clear condition varied_var heldvars_each legendvars_each heldvars_all legendvars
 % legendvars_each = {'LatticeHold','TOF','VVA1064_Er'};
 % heldvars_all = {'LatticeHold','TOF'};
 % legendvars_all = heldvars_each;
-% YLim = [0,200];
 
 %%%%%%%%%%%%%%%%%%%%%%%%
 %%% LatticeHold Runs %%%
@@ -59,7 +58,6 @@ legendvars_all = heldvars_each;
 % heldvars_all = {};
 % legendvars_all = {'VVA1064_Er', 'VVA915_Er', 'PiezoModFreq'};
 % piezo_freq_tag = 1;
-% widthYLim = [0,400];
 
 %%%%%%%%%%%%%%%%%%%%%%%%
 %%% Later Drive Runs %%%
