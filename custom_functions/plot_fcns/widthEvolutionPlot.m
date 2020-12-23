@@ -42,7 +42,7 @@ arguments
     options.Interpreter (1,1) string = "latex"
     %
     options.LegendLabels = []
-    options.LegendTitle string = "1064 Depth (Er)"
+    options.LegendTitle string = ""
     options.Position (1,4) double = [2561, 27, 1920, 963];
     %
     options.PlotTitle = ""
@@ -81,14 +81,6 @@ end
 for j = 1:length(RunDatas)
     [avg_ads{j}, varied_var_values{j}] = avgRepeats(...
         RunDatas{j}, varied_variable_name, plottedDensity, SD);
-    
-    for k = 1:length(legendvars)
-        if legendvars{k} ~= "PiezoModFreq"
-            legendvals{j}{k} = RunDatas{j}.vars.(legendvars{k});
-        else
-            legendvals{j}{k} = unique( arrayfun( @(x) x.vars.(legendvars{k}), RunDatas{j}.Atomdata ));
-        end
-    end
 end
 
 %% Compute Widths
@@ -130,50 +122,10 @@ hold off;
 
 %% Setup
 
-options.LegendTitle = strrep(strjoin(legendvars,", "),'_','');
-
-for j = 1:length(RunDatas)
-    labels(j) = strcat(RunDatas{j}.RunNumber, ": ");
-    for k = 1:length(legendvars)
-        labels(j) = strcat(labels(j), num2str( legendvals{j}{k} ), ", " );
-    end
-end
-
-% for ii = 1:length(depth1064)
-%     if ii == 1
-%         labels = [strcat(RunDatas{ii}.RunNumber, ": ", string( depth1064(ii) ))];
-%         if add_915_tag
-%             labels(ii) = strcat(labels(ii), "-", string(depth915(ii)));
-%         end
-%         if add_piezo_freq_tag
-%             labels(ii) = strcat(labels(ii), ", ", string(piezomodfreq(ii)));
-%         end
-%     else
-%         labels = [labels; strcat(RunDatas{ii}.RunNumber, ": ", string( depth1064(ii) ))];
-%         if add_915_tag
-%             labels(ii) = strcat(labels(ii), "-", string(depth915(ii)));
-%         end
-%         if add_piezo_freq_tag
-%             labels(ii) = strcat(labels(ii), ", ", string(piezomodfreq(ii)));
-%         end
-%     end
-%     
-%     if options.IncludeSDPlot
-%         labels = [labels; strcat("SD: ", string( depth1064(ii) ))];
-%         if add_915_tag
-%             labels(ii) = strcat(labels(ii), "-", string(depth915(ii)));
-%         end
-%         if add_piezo_freq_tag
-%             labels(ii) = strcat(labels(ii), ", ", string(piezomodfreq(ii)));
-%         end
-%     end
-% end
-
-options.LegendLabels = labels;
-
 plot_title = setupPlot( width_evo_plot, RunDatas, ...
         strcat('FracWidth (',options.PlottedDensity,')'), ...
         varied_variable_name, ...
+        legendvars, ...
         varargin, ...
         'yLabel', options.yLabel, ...
         'yUnits', options.yUnits, ...

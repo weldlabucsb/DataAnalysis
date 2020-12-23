@@ -21,19 +21,22 @@ arguments (Repeating)
 end
 
 %% Get Folder, Date for Run
-
-if ~isempty(varargin{1})
-    held_var_flag = 1;
-    for ii = 1:length(varargin{1})
-        held_var_name(ii) = string(varargin{1}{ii});
-        [~,held_var_value(ii)] = determineIfHeldVarConstant(RunDatas,held_var_name(ii));
-        if ii == 1
-            held_var_string = strcat(held_var_name(ii), " - ", num2str( held_var_value(ii) ));
-        else
-            held_var_string = strcat(held_var_string,", ",held_var_name(ii), " - ", num2str( held_var_value(ii) ));
+if ~isempty(varargin)
+    if ~isempty(varargin{1})
+        held_var_flag = 1;
+        for ii = 1:length(varargin{1})
+            held_var_name(ii) = string(varargin{1}{ii});
+            [~,held_var_value(ii)] = determineIfHeldVarConstant(RunDatas,held_var_name(ii));
+            if ii == 1
+                held_var_string = strcat(held_var_name(ii), " - ", num2str( held_var_value(ii) ));
+            else
+                held_var_string = strcat(held_var_string,", ",held_var_name(ii), " - ", num2str( held_var_value(ii) ));
+            end
         end
+        held_var_string = fix(held_var_string);
+    else
+        held_var_flag = 0;
     end
-    held_var_string = fix(held_var_string);
 else
     held_var_flag = 0;
 end

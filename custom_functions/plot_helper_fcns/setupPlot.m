@@ -1,9 +1,13 @@
-function plot_title = setupPlot(figure_handle, RunDatas, plotted_dependent_var, varied_variable_name, varargin, options)
+function plot_title = setupPlot(figure_handle, RunDatas, plotted_dependent_var, varied_variable_name, legendvars, varargin, options)
 % SETUPPLOT sets axes labels, title, legend, etc. Also outputs the plot
 % title in case it is useful for figure saving, etc.
 %
 % SETUPPLOT will use default values from RunData if optional arguments are
 % not given.
+%
+% legendvars must be specified as a cell array of strings. The names of
+% the variables are used as the title of the legend, and their values for
+% each plotted RunData are added to the legend.
 %
 % varargin can be used for any number of variables held constant that you
 % want included in a pre-generated title. Does nothing if PlotTitle option
@@ -25,6 +29,7 @@ arguments
     RunDatas
     plotted_dependent_var string
     varied_variable_name string
+    legendvars cell
 end
 arguments (Repeating)
     varargin
@@ -43,7 +48,7 @@ arguments
     options.Interpreter (1,1) string = "latex"
     %
     options.LegendLabels = []
-    options.LegendTitle string = varied_variable_name
+    options.LegendTitle string = "Legend"
     options.Position (1,4) double = [0, 0, 1280, 720];
     %
     options.PlotTitle = ""
@@ -92,6 +97,50 @@ else
 end
 
 %% Plot Legend
+
+% If LegendTitle not specified manually, generate from list of legend
+% variables
+if options.LegendTitle == ""
+    titleLegendVars = varAlias(legendvars);
+    options.LegendTitle = strrep(strjoin(legendvars,", "),'_','');
+end
+
+% If LegendLabels were not specified manually, generate them from the list
+% of legend variables.
+if isempty(options.LegendLabels)
+    
+    % compute the values of each legend variable and add to legend
+    for j = 1:length(RunDatas)
+        for k = 1:length(legendvars)
+            if legendvars{k} ~= "PiezoModFreq" && isfield(RunDatas{j}.vars,legendvars{k})
+            % look at rundata to pull value of legend variables
+                legendvals{j}{k} = RunDatas{j}.vars.(legendvars{k});
+            elseif ~isfield(RunDatas{j}.vars,legendvars{k}) || legendvars{k} == "PiezoModFreq"
+            % if legendvar not part of rundata, look at atomdata
+                legendvals{j}{k} = unique( arrayfun( @(x) x.vars.(legendvars{k}), RunDatas{j}.Atomdata ));
+            else
+            % error if the legendvar is not a field of RunData or atomdata
+                legendvals{j}{k} = "Err";
+                disp(strcat("The legend variable '",legendvars{k},...
+                    "' does not exist in RunData or Atomdata. Did you misspell it?"));
+            end
+        end
+    end
+
+    % stick the values together into proper legend labels.
+    for j = 1:length(RunDatas)
+        labels(j) = strcat(RunDatas{j}.RunNumber, ": ");
+
+        labels(j) = strcat(labels(j), num2str( legendvals{j}{1} ), ", " );
+        for k = 2:(length(legendvars)-1)
+            labels(j) = strcat(labels(j), num2str( legendvals{j}{k} ), ", " );
+        end
+        labels(j) = strcat(labels(j), num2str( legendvals{j}{end} ));
+    end
+    
+    options.LegendLabels = labels;
+    
+end
 
 if class(options.LegendLabels) == "string" || class(options.LegendLabels) == "char"
     % Legend Labeling
