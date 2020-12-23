@@ -1,21 +1,21 @@
-function [avg_atomdata, varied_var_values]  = avgRepeats(RunDatas, varied_variable_name, varargin)
+function [avg_atomdata, varied_var_values]  = avgRepeats(RunDatas, varied_variable_name, vars_to_be_avgd)
 % AVG_REPEATS averages the repeats over the provided RunDatas.Atomdata
 % Provide the varied_variable_name as a string corresponding to a variable
 % in RunDatas.Atomdata.vars.(varied_variable_name).
 %
-% varargin should be a list of cicero variable names. Repeat-averaged
-% values of these variables will be put in the output (avg_atomdata).
+% vars_to_be_avgd should be a cell array of cicero variable names.
+% Repeat-averaged values of these variables will be put in the output
+% (avg_atomdata). This will later be updated to just repeat-average all the
+% variables that you want and generate a complete repeat-averaged atomdata
 
     arguments
         RunDatas
-        varied_variable_name
-    end
-    arguments (Repeating)
-        varargin
+        varied_variable_name string
+        vars_to_be_avgd cell
     end
     
     Nvars = length(varargin);
-    varnames = varargin;
+    varnames = vars_to_be_avgd;
     
     raw_atomdata.(varied_variable_name) = [];
     for j = 1:Nvars

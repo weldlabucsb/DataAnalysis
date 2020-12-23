@@ -16,8 +16,7 @@ arguments (Repeating)
     varargin
 end
 arguments
-    %
-    options.SmoothWindow = 5
+    options.SmoothWindow (1,1) double = 5
     %
     options.PlottedDensity = "summedODy"
     %
@@ -26,7 +25,6 @@ arguments
     options.WidthFraction (1,1) double = 0.5
     %
     options.LineWidth (1,1) double = 1.5
-    %
     %
     %
     options.yLabel string = ""
@@ -52,7 +50,6 @@ arguments
     %
     options.PlotPadding = 0;
     %
-    options.PiezoFreqTag = 1;
 end
 
 options.yLabel = strcat("Width at ", num2str(options.WidthFraction), " of Max Density");
@@ -70,7 +67,7 @@ end
 
 % requires paramsfnc (found in StrontiumData/ImageAnalysisSoftware/v6/)
 [~,~,pixelsize,mag] = paramsfnc('ANDOR');
-xConvert = pixelsize/mag * 1e6;
+xConvert = pixelsize/mag * 1e6; % converts the x-axis to um.
 
 %% Avg Atomdata entries for same varied_variable_value
 
@@ -91,9 +88,9 @@ for j = 1:length(RunDatas)
     
     for ii = 1:size(avg_ads{j},2)
        widths{j}(ii) = fracWidth( X{j}, avg_ads{j}(ii).(plottedDensity), options.WidthFraction, ...
-           'PeakRadius',5,'SmoothWindow',5);
+           'PeakRadius',5,'SmoothWindow',options.SmoothWindow);
     end
-    
+     
 end
 
 %% Make Figure

@@ -62,6 +62,10 @@ Data = RunDataLibrary();
 Data = Data.libraryConstruct(DATA,condition);
 runDatas = Data.RunDatas;
 
+if ~exist('YLim')
+   YLim = [0,0]; % setupPlot knows to ignore this if it is [0,0]. 
+end
+
 %%
 
 for j = 1:length(runDatas)
