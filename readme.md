@@ -3,7 +3,7 @@
 The idea was to package together a bunch of functions that make building plots and analyzing data from RunDatas much easier. Includes a tool (GetRunDatas) for streamlining pulling a RunDataLibrary from a datatable.csv using DataManager.
 
 ## Getting Started
-Check out the exampleAnalysis_QC.m to see how to set up and use the plot functions. Most of this is just sorting/manipulating the DataManager objects to pare them down to the runs we want.
+Check out exampleAnalysis_QC.m to see how to set up and use the plot functions. Most of this is just sorting/manipulating the DataManager objects to pare them down to the runs we want.
 
 For a tutorial in writing plot functions using this architecture, read plotFunctionTemplate.m.
 
