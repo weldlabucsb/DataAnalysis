@@ -1,4 +1,4 @@
-function [expansion_plot, figure_filename] = stackedExpansionPlot(RunDatas,offset_tag,varied_variable_name,varargin,options)
+function [expansion_plot, figure_filename] = stackedExpansionPlot(RunDatas,offset_tag,varied_variable_name,legendvars, varargin,options)
 % STACKEDEXPANSIONPLOT  Generate stacked expansion plot from avg'd
 % RunDatas.
 %
@@ -12,6 +12,7 @@ arguments
     RunDatas
     offset_tag (1,1) logical
     varied_variable_name string
+    legendvars cell
 end
 arguments (Repeating)
     varargin
@@ -103,6 +104,7 @@ end
     
     plot_title = setupPlot( expansion_plot, RunDatas, ...
         options.PlottedDensity, varied_variable_name, ...
+        legendvars, ...
         varargin, ...
         'LegendLabels', labels, ...
         'yLabel', options.yLabel, ...

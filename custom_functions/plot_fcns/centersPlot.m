@@ -1,8 +1,9 @@
-function [centers_plot, figure_filename] = centersPlot(RunDatas,varied_variable_name,varargin,options)
+function [centers_plot, figure_filename] = centersPlot(RunDatas,varied_variable_name,legendvars,varargin,options)
 
 arguments
     RunDatas
-    varied_variable_name
+    varied_variable_name string
+    legendvars cell
 end
 arguments (Repeating)
     varargin
@@ -71,9 +72,9 @@ end
 for j = 1:length(RunDatas)
     [avg_ads{j}, varied_var_values{j}] = avgRepeats(...
         RunDatas{j}, varied_variable_name, plottedDensity);
-    depth1064{j} = unique( arrayfun( @(x) x.vars.VVA1064_Er, RunDatas{j}.Atomdata ));
-    depth915{j} = unique( arrayfun( @(x) x.vars.VVA915_Er, RunDatas{j}.Atomdata )); 
-    piezomodfreq{j} = unique( arrayfun( @(x) x.vars.PiezoModFreq, RunDatas{j}.Atomdata )); 
+%     depth1064{j} = unique( arrayfun( @(x) x.vars.VVA1064_Er, RunDatas{j}.Atomdata ));
+%     depth915{j} = unique( arrayfun( @(x) x.vars.VVA915_Er, RunDatas{j}.Atomdata )); 
+%     piezomodfreq{j} = unique( arrayfun( @(x) x.vars.PiezoModFreq, RunDatas{j}.Atomdata )); 
 end
 
 %% Compute Widths
@@ -109,33 +110,34 @@ hold off;
 
 %% Setup
 
-labels = [];
+% labels = [];
 
-for ii = 1:length(depth1064)
-    if ii == 1
-        labels = [strcat(RunDatas{ii}.RunNumber, ": ", string( depth1064(ii) ))];
-        if add_915_tag
-            labels(ii) = strcat(labels(ii), "-", string(depth915(ii)));
-        end
-        if add_piezo_freq_tag
-            labels(ii) = strcat(labels(ii), ", ", string(piezomodfreq(ii)));
-        end
-    else
-        labels = [labels; strcat(RunDatas{ii}.RunNumber, ": ", string( depth1064(ii) ))];
-        if add_915_tag
-            labels(ii) = strcat(labels(ii), "-", string(depth915(ii)));
-        end
-        if add_piezo_freq_tag
-            labels(ii) = strcat(labels(ii), ", ", string(piezomodfreq(ii)));
-        end
-    end
-end
+% for ii = 1:length(depth1064)
+%     if ii == 1
+%         labels = [strcat(RunDatas{ii}.RunNumber, ": ", string( depth1064(ii) ))];
+%         if add_915_tag
+%             labels(ii) = strcat(labels(ii), "-", string(depth915(ii)));
+%         end
+%         if add_piezo_freq_tag
+%             labels(ii) = strcat(labels(ii), ", ", string(piezomodfreq(ii)));
+%         end
+%     else
+%         labels = [labels; strcat(RunDatas{ii}.RunNumber, ": ", string( depth1064(ii) ))];
+%         if add_915_tag
+%             labels(ii) = strcat(labels(ii), "-", string(depth915(ii)));
+%         end
+%         if add_piezo_freq_tag
+%             labels(ii) = strcat(labels(ii), ", ", string(piezomodfreq(ii)));
+%         end
+%     end
+% end
 
-options.LegendLabels = labels;
+% options.LegendLabels = labels;
 
 plot_title = setupPlot( centers_plot, RunDatas, ...
         strcat('Center Position (',options.PlottedDensity,')'), ...
         varied_variable_name, ...
+        legendvars, ...
         varargin, ...
         'yLabel', options.yLabel, ...
         'yUnits', options.yUnits, ...

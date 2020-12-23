@@ -100,7 +100,7 @@ end
 
 % If LegendTitle not specified manually, generate from list of legend
 % variables
-if options.LegendTitle == ""
+if options.LegendTitle == "Legend"
     titleLegendVars = varAlias(legendvars);
     options.LegendTitle = strrep(strjoin(titleLegendVars,", "),'_','');
 end
