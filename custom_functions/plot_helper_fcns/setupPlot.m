@@ -1,6 +1,7 @@
-function plot_title = setupPlot(figure_handle, RunDatas, plotted_dependent_var, varied_variable_name, legendvars, varargin, options)
+function [plot_title, figure_filename] = setupPlot(figure_handle, RunDatas, plotted_dependent_var, varied_variable_name, legendvars, varargin, options)
 % SETUPPLOT sets axes labels, title, legend, etc. Also outputs the plot
-% title in case it is useful for figure saving, etc.
+% title and a figure filename (containing the same information as the plot
+% title), for use in saving figures.
 %
 % SETUPPLOT will use default values from RunData if optional arguments are
 % not given.
@@ -79,6 +80,8 @@ if options.PlotTitle == ""
 else
     plot_title = options.PlotTitle;
 end
+
+figure_filename = filenameFromPlotTitle(plot_title);
 
 %% Parsing
 

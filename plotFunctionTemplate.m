@@ -150,7 +150,7 @@ end
     % different variable names for the figure_title_dependent_var or
     % fig_handle.
     
-    plot_title = setupPlot( fig_handle, RunDatas, ...
+    [plot_title, figure_filename] = setupPlot( fig_handle, RunDatas, ...
         figure_title_dependent_var, ...
         varied_variable_name, ...
         legendvars, ...
@@ -170,11 +170,8 @@ end
         'yLim',options.yLim,...
         'xLim',options.xLim);
     
-    % Note that the setupPlot function outputs a plot title. Feed it to the
-    % following to generate a filename from the plot title. It will include
-    % the run numbers, dates, and the independent variable and held
-    % variable names/values.
-    
-    figure_filename = filenameFromPlotTitle(plot_title);
+    % Note that the setupPlot function outputs a figure filename to be used
+    % when saving the figure. It will include the run numbers, dates, and
+    % the independent variable and held variable names/values.
     
 end
