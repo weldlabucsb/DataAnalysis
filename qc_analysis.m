@@ -10,24 +10,29 @@ if ~exist('DATA','var')
 end
 
 %% Sort the Data
+clear condition varied_var heldvars_each legendvars_each heldvars_all legendvars_each YLim
+% uncomment whichever chunks of data you want to look at
 
 % % % Disorder Runs
-% condition = {'RunID','12_14','RunNumber',{'27' '28' '29' '30' '31' '32'}};
-% varied_var = 'VVA915_Er';
-% heldvars_each = {'LatticeHold','TOF','VVA1064_Er'};
-% heldvars_all = {'LatticeHold','TOF'};
+condition = {'RunID','12_14','RunNumber',{'27' '28' '29' '30' '31' '32'}};
+varied_var = 'VVA915_Er';
+heldvars_each = {'LatticeHold','TOF','VVA1064_Er'};
+legendvars_each = {'LatticeHold','TOF','VVA1064_Er'};
+heldvars_all = {'LatticeHold','TOF'};
+legendvars_all = heldvars_each;
+YLim = [0,200];
 
 % % % LatticeHold Runs
 % condition = {'RunID', '12_09', 'RunNumber', ...
 %     makeRunNumberList([23 24 26 27 29 30 32:41])};
-condition = {'RunID', '12_09', 'RunNumber', ...
-    makeRunNumberList([25 28 31 32:36 40 41])};
-varied_var = 'LatticeHold';
-heldvars_each = {'VVA915_Er','VVA1064_Er'};
-legendvars_each = {'VVA1064_Er'};
-heldvars_all = {};
-legendvars_all = {'VVA1064_Er','VVA915_Er'};
-YLim = [0,200];
+% condition = {'RunID', '12_09', 'RunNumber', ...
+%     makeRunNumberList([25 28 31 32:36 40 41])};
+% varied_var = 'LatticeHold';
+% heldvars_each = {'VVA915_Er','VVA1064_Er'};
+% legendvars_each = {'VVA1064_Er'};
+% heldvars_all = {};
+% legendvars_all = heldvars_each;
+% YLim = [0,200];
 
 % % % Slow Drive Runs
 % condition = {'RunID', '12_15', 'RunNumber',...
@@ -37,20 +42,19 @@ YLim = [0,200];
 %     makeRunNumberList([32:37])};
 % varied_var = 'LatticeHold';
 % heldvars_each = {'PiezoModFreq'};
+% legendvars_each = {'VVA1064_Er', 'VVA915_Er', 'PiezoModFreq'};
 % heldvars_all = {};
-% legendvars = {'VVA1064_Er', 'VVA915_Er', 'PiezoModFreq'};
+% legendvars_all = {'VVA1064_Er', 'VVA915_Er', 'PiezoModFreq'};
 % piezo_freq_tag = 1;
 % widthYLim = [0,400];
 
+% Still need to write out the vars for these
 % condition = {'RunID', '12_16', 'RunNumber',...
 %     makeRunNumberList([9:16])};
 % condition = {'RunID', '12_18', 'RunNumber',...
 %     makeRunNumberList([19:30])};
 % condition = {'RunID', '12_19', 'RunNumber',...
 %     makeRunNumberList([7:30])};
-
-
-%%
 
 Data = RunDataLibrary();
 Data = Data.libraryConstruct(DATA,condition);

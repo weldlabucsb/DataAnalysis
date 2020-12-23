@@ -48,7 +48,7 @@ arguments
     options.Interpreter (1,1) string = "latex"
     %
     options.LegendLabels = []
-    options.LegendTitle string = "Legend"
+    options.LegendTitle string = ""
     options.Position (1,4) double = [0, 0, 1280, 720];
     %
     options.PlotTitle = ""
@@ -100,7 +100,7 @@ end
 
 % If LegendTitle not specified manually, generate from list of legend
 % variables
-if options.LegendTitle == "Legend"
+if options.LegendTitle == ""
     titleLegendVars = varAlias(legendvars);
     options.LegendTitle = strrep(strjoin(titleLegendVars,", "),'_','');
 end
@@ -131,9 +131,11 @@ if isempty(options.LegendLabels)
     for j = 1:length(RunDatas)
         labels(j) = strcat(RunDatas{j}.RunNumber, ": ");
 
-        labels(j) = strcat(labels(j), num2str( legendvals{j}{1} ), ", " );
+        thisvarval = num2str(legendvals{j}{1});
+        labels(j) = strcat(labels(j), thisvarval, ", " );
         for k = 2:(length(legendvars)-1)
-            labels(j) = strcat(labels(j), num2str( legendvals{j}{k} ), ", " );
+            thisvarval = num2str( legendvals{j}{k} );
+            labels(j) = strcat(labels(j), thisvarval, ", " );
         end
         labels(j) = strcat(labels(j), num2str( legendvals{j}{end} ));
     end
