@@ -21,6 +21,12 @@ arguments (Repeating)
 end
 
 %% Get Folder, Date for Run
+
+% the following nested list of nonsense is the unfortunate consequence of
+% me not intially realizing how varargins passed from function to function
+% get nested further and further into cell arrays. If it works, don't
+% question it. If it doesn't, let me know and I'll properly unpack the
+% varargins as they are passed between functions.
 if ~isempty(varargin)
     if ~isempty(varargin{1})
         held_var_flag = 1;

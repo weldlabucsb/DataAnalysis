@@ -11,10 +11,18 @@ function [avg_atomdata, varied_var_values]  = avgRepeats(RunDatas, varied_variab
     arguments
         RunDatas
         varied_variable_name string
-        vars_to_be_avgd cell
+        vars_to_be_avgd
     end
     
-    Nvars = length(varargin);
+    % if some knucklehead gave me a string with one variable name instead
+    % of a cell array, pack it into a cell array
+    if (class(vars_to_be_avgd) == "string" || class(vars_to_be_avgd) == "char") ...
+            && length(string(vars_to_be_avgd)) == 1
+        vars_to_be_avgd = {vars_to_be_avgd};
+    end
+    
+    Nvars = length(vars_to_be_avgd);
+    
     varnames = vars_to_be_avgd;
     
     raw_atomdata.(varied_variable_name) = [];
