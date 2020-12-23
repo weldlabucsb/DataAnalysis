@@ -5,7 +5,7 @@ function [width_evo_plot,figure_filename] = widthEvolutionPlot(RunDatas,varied_v
 %
 % legendvars must be specified as a cell array of strings. The names of
 % the variables are used as the title of the legend, and their values for
-% each plotted RunData are 
+% each plotted RunData are added to the legend.
 
 arguments
     RunDatas
