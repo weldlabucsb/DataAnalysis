@@ -102,7 +102,7 @@ end
 % variables
 if options.LegendTitle == ""
     titleLegendVars = varAlias(legendvars);
-    options.LegendTitle = strrep(strjoin(legendvars,", "),'_','');
+    options.LegendTitle = strrep(strjoin(titleLegendVars,", "),'_','');
 end
 
 % If LegendLabels were not specified manually, generate them from the list
