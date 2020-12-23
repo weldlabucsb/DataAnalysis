@@ -31,6 +31,7 @@ plot_title = setupPlot( width_evo_plot, RunDatas, ...
         'yLim',options.yLim,...
         'xLim',options.xLim);
 ```
+
     - legendvars is a cell array of variable names whose names should be included in the legend title, and whose values should be associated with each entry in the legend. Example: legendvars = {'VVA1064_Er','VVA915_Er'} produces a legend where each entry is labeled by the 1064 depth and 915 depth.
         - Leave the LegendLabels and LegendTitle options unspecified to automatically generate the legends this way. If you specify them as options to setupPlot, you will respectively override the automatic generation of the legend labels/title.
 
