@@ -145,24 +145,3 @@ plot_title = setupPlot( width_evo_plot, RunDatas, ...
 figure_filename = filenameFromPlotTitle(plot_title);
 
 end
-
-% for ii = 1:length(depth1064)
-%     if ii == 1
-%         labels = [strcat("Frac: ", string( depth1064(ii) ))];
-%         if add_915_tag
-%             labels(ii) = strcat(labels(ii), "-", string(depth915(ii)));
-%         end
-%     else
-%         labels = [labels; strcat("Frac: ", string( depth1064(ii) ))];
-%         if add_915_tag
-%             labels(ii) = strcat(labels(ii), "-", string(depth915(ii)));
-%         end
-%     end
-%     
-%     if options.IncludeSDPlot
-%         labels = [labels; strcat("SD: ", string( depth1064(ii) ))];
-%         if add_915_tag
-%             labels(ii) = strcat(labels(ii), "-", string(depth915(ii)));
-%         end
-%     end
-% end

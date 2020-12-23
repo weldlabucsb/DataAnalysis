@@ -71,10 +71,7 @@ end
 
 for j = 1:length(RunDatas)
     [avg_ads{j}, varied_var_values{j}] = avgRepeats(...
-        RunDatas{j}, varied_variable_name, plottedDensity);
-%     depth1064{j} = unique( arrayfun( @(x) x.vars.VVA1064_Er, RunDatas{j}.Atomdata ));
-%     depth915{j} = unique( arrayfun( @(x) x.vars.VVA915_Er, RunDatas{j}.Atomdata )); 
-%     piezomodfreq{j} = unique( arrayfun( @(x) x.vars.PiezoModFreq, RunDatas{j}.Atomdata )); 
+        RunDatas{j}, varied_variable_name, plottedDensity); 
 end
 
 %% Compute Widths
@@ -109,30 +106,6 @@ end
 hold off;
 
 %% Setup
-
-% labels = [];
-
-% for ii = 1:length(depth1064)
-%     if ii == 1
-%         labels = [strcat(RunDatas{ii}.RunNumber, ": ", string( depth1064(ii) ))];
-%         if add_915_tag
-%             labels(ii) = strcat(labels(ii), "-", string(depth915(ii)));
-%         end
-%         if add_piezo_freq_tag
-%             labels(ii) = strcat(labels(ii), ", ", string(piezomodfreq(ii)));
-%         end
-%     else
-%         labels = [labels; strcat(RunDatas{ii}.RunNumber, ": ", string( depth1064(ii) ))];
-%         if add_915_tag
-%             labels(ii) = strcat(labels(ii), "-", string(depth915(ii)));
-%         end
-%         if add_piezo_freq_tag
-%             labels(ii) = strcat(labels(ii), ", ", string(piezomodfreq(ii)));
-%         end
-%     end
-% end
-
-% options.LegendLabels = labels;
 
 plot_title = setupPlot( centers_plot, RunDatas, ...
         strcat('Center Position (',options.PlottedDensity,')'), ...

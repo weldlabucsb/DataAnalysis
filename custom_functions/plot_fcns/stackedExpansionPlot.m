@@ -2,11 +2,14 @@ function [expansion_plot, figure_filename] = stackedExpansionPlot(RunDatas,offse
 % STACKEDEXPANSIONPLOT  Generate stacked expansion plot from avg'd
 % RunDatas.
 %
+%   offset_tag toggles whether the plots should be offset or overlaid.
+%
+%   legendvars is a cell array of the variable names (and corresponding values)
+%   that should be associated with each trace in the plot.
+%
 %   varargin can be any number of held variable names.
 %  
 %   Passes its optional arguments to setupPlot.
-%
-%
 
 arguments
     RunDatas
@@ -53,7 +56,6 @@ end
     
     %% Avg Atomdata entries for same varied_variable_value
     
-%     [density, varied_var_values]  = avgRepeats(RunDatas, varied_variable_name);
     [ad, varied_var_values] = avgRepeats(...
         RunDatas, varied_variable_name,options.PlottedDensity);
     
