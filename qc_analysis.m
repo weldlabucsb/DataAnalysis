@@ -3,36 +3,38 @@
 %% Get the Data
 
 data_dir = 'G:\My Drive\_WeldLab\Code\Analysis\_DataAnalysis\_data_loading\Data';
-data_file = 'Data_22-Dec-2020_test2.mat';
+data_file = 'Data_22-Dec-2020.mat';
 if ~exist('DATA','var')
     load(fullfile(data_dir,data_file));
     DATA = Data;
 end
 
 %% Sort the Data
+% Uncomment whichever chunks of data you want to look at. Uncomment only
+% one condition.
+
 clear condition varied_var heldvars_each legendvars_each heldvars_all legendvars_each YLim
-% uncomment whichever chunks of data you want to look at
 
 % % % Disorder Runs
-condition = {'RunID','12_14','RunNumber',{'27' '28' '29' '30' '31' '32'}};
-varied_var = 'VVA915_Er';
-heldvars_each = {'LatticeHold','TOF','VVA1064_Er'};
-legendvars_each = {'LatticeHold','TOF','VVA1064_Er'};
-heldvars_all = {'LatticeHold','TOF'};
-legendvars_all = heldvars_each;
-YLim = [0,200];
+% condition = {'RunID','12_14','RunNumber',{'27' '28' '29' '30' '31' '32'}};
+% varied_var = 'VVA915_Er';
+% heldvars_each = {'LatticeHold','TOF','VVA1064_Er'};
+% legendvars_each = {'LatticeHold','TOF','VVA1064_Er'};
+% heldvars_all = {'LatticeHold','TOF'};
+% legendvars_all = heldvars_each;
+% YLim = [0,200];
 
 % % % LatticeHold Runs
 % condition = {'RunID', '12_09', 'RunNumber', ...
 %     makeRunNumberList([23 24 26 27 29 30 32:41])};
-% condition = {'RunID', '12_09', 'RunNumber', ...
-%     makeRunNumberList([25 28 31 32:36 40 41])};
-% varied_var = 'LatticeHold';
-% heldvars_each = {'VVA915_Er','VVA1064_Er'};
-% legendvars_each = {'VVA1064_Er'};
-% heldvars_all = {};
-% legendvars_all = heldvars_each;
-% YLim = [0,200];
+condition = {'RunID', '12_09', 'RunNumber', ...
+    makeRunNumberList([25 28 31 32:36 40 41])};
+varied_var = 'LatticeHold';
+heldvars_each = {'VVA915_Er','VVA1064_Er'};
+legendvars_each = {varied_var};
+heldvars_all = {};
+legendvars_all = heldvars_each;
+YLim = [0,200];
 
 % % % Slow Drive Runs
 % condition = {'RunID', '12_15', 'RunNumber',...
