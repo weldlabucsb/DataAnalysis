@@ -25,6 +25,8 @@ function [fig_handle, fig_filename] = plotFunctionTemplate(RunDatas,varied_varia
 %       time on the same axes), specify those variables in legendvars so
 %       that the runs will be labeled in the legend.
 
+% Just copy-paste this arguments list. You can of course add more arguments
+% to your own functions.
 arguments
     RunDatas
     varied_variable_name
@@ -58,7 +60,6 @@ arguments
     options.yLim (1,2) double = [0,0]
     %
     options.PlotPadding = 0;
-    %
 end
 
     % Use avgRepeats on your RunDatas to extract repeat-averaged values of

@@ -43,7 +43,7 @@ plot_title = setupPlot( width_evo_plot, RunDatas, ...
         'xLim',options.xLim);
 ```
 
-- avgRepeats averages the repeats in the provided RunData for each value of the specified varied cicero variable. Can average repeats over multiple RunDatas if provided as a cell array of RunDatas. Currently outputs averaged summedODy, varied_variable_values, and yWidths (SD of gaussian fit), but will later be extended to output the repeat-averaged specified cicero variable name.
+- avgRepeats averages the repeats in the provided RunData for each value of the specified varied cicero variable. Can average repeats over multiple RunDatas if provided as a cell array of RunDatas. Outputs an averaged atomdata-like structure with averaged values for the variable names provided as a cell array (of strings) as its third argument.
 
 ## Current State of Affairs
 I've so far built a couple plotting functions based on this functionality, such as stackedExpansionPlot and widthEvolutionPlot. More will follow.
