@@ -110,7 +110,7 @@ end
 
 % If LegendLabels were not specified manually, generate them from the list
 % of legend variables.
-if isempty(options.LegendLabels)
+if isempty(options.LegendLabels) && ~isempty(legendvars)
     
     % compute the values of each legend variable and add to legend
     for j = 1:length(RunDatas)
@@ -143,9 +143,13 @@ if isempty(options.LegendLabels)
         labels(j) = strcat(labels(j), num2str( legendvals{j}{end} ));
     end
     
-    options.LegendLabels = labels;
     
+    
+else
+    labels = string(cellfun( @(x) x.RunNumber, RunDatas, 'UniformOutput', false));
 end
+
+options.LegendLabels = labels;
 
 if class(options.LegendLabels) == "string" || class(options.LegendLabels) == "char"
     % Legend Labeling
