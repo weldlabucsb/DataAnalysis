@@ -24,8 +24,9 @@ selectRuns(DATA);
 pause; 
 
 % selectRuns saves a cell array ("RunDatas") of the selected runDatas to
-% the workspace, as well as the variable selections ("RunVars") (for which
-% variable is varied, which are held, etc) you made in the GUI.
+% the workspace, as well as the variable selections ("RunVars") you made in
+% the GUI (for which variable is varied, which are held constant across
+% each/all runs, etc).
 %
 % Also saves the full RunDataLibrary ("runDataLib") of the selected runs,
 % in case you are a pro-gamer and want to use that.
