@@ -3,7 +3,7 @@
 % Load the RunDataLibrary object that you generated with the beam trawler
 % (or otherwise). You'll obviously need to change these paths.
 data_dir = 'G:\My Drive\_WeldLab\Code\Analysis\_DataAnalysis\_data_loading\Data';
-data_file = 'Data_22-Dec-2020.mat';
+data_file = '15-Dec-2020_23-Dec-2020.mat';
 data_path = fullfile(data_dir,data_file);
 
 if ~exist('DATA','var')
@@ -21,10 +21,10 @@ clear condition varied_var heldvars_each legendvars_each heldvars_all legendvars
 %%% Disorder Runs %%%
 
 % condition = {'RunID','12_14','RunNumber',{'27' '28' '29' '30' '31' '32'}};
-
+% 
 % varied_var = 'VVA915_Er';
 % heldvars_each = {'LatticeHold','TOF','VVA1064_Er'};
-% legendvars_each = {'LatticeHold','TOF','VVA1064_Er'};
+% legendvars_each = varied_var;
 % heldvars_all = {'LatticeHold','TOF'};
 % legendvars_all = heldvars_each;
 
@@ -34,14 +34,14 @@ clear condition varied_var heldvars_each legendvars_each heldvars_all legendvars
 % condition = {'RunID', '12_09', 'RunNumber', ...
 %     makeRunNumberList([23 24 26 27 29 30 32:41])};
 
-condition = {'RunID', '12_09', 'RunNumber', ...
-    makeRunNumberList([25 28 31 32:36 40 41])};
-
-varied_var = 'LatticeHold';
-heldvars_each = {'VVA915_Er','VVA1064_Er'};
-legendvars_each = {varied_var};
-heldvars_all = {};
-legendvars_all = heldvars_each;
+% condition = {'RunID', '12_09', 'RunNumber', ...
+%     makeRunNumberList([25 28 31 32:36 40 41])};
+% 
+% varied_var = 'LatticeHold';
+% heldvars_each = {'VVA915_Er','VVA1064_Er'};
+% legendvars_each = {varied_var};
+% heldvars_all = {};
+% legendvars_all = heldvars_each;
 
 %%%%%%%%%%%%%%%%%%%%%%%
 %%% Slow Drive Runs %%%
@@ -79,6 +79,10 @@ legendvars_all = heldvars_each;
 Data = RunDataLibrary();
 Data = Data.libraryConstruct(DATA,condition);
 runDatas = Data.RunDatas;
+
+if isempty(runDatas)
+   error("runDatas is empty. Are your conditions right?"); 
+end
 
 %% Now you can call your plotfunctions!
 
