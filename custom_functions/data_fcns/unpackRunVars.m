@@ -23,6 +23,6 @@ legendvars_each = varied_var;
 % Example: For plotting the widths of a set of time series runs for
 % different 1064 or 915, I want each trace labeled by the 1064 and 915
 % values of each run.
-legendvars_all = runvars.heldvars_each;
+legendvars_all = heldvars_each;
 
 end
