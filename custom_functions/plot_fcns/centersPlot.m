@@ -1,4 +1,6 @@
 function [centers_plot, figure_filename] = centersPlot(RunDatas,varied_variable_name,legendvars,varargin,options)
+% CENTERSPLOT plots the position of the center of the cloud (can specify
+% summedODy or summedODx) versus the varied variable.
 
 arguments
     RunDatas
