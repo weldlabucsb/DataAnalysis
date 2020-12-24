@@ -76,7 +76,9 @@ function [width, center, peakLeftEdge, peakRightEdge] = fracWidth(x,y,widthFract
         
         [~, peakIndex] = max(y);
         centerX = x(peakIndex);
-        window = [(peakIndex - radius):(peakIndex + radius)];
+        peakWindowLeft = max(1,(peakIndex - radius));
+        peakWindowRight = min(length(y),(peakIndex + radius));
+        window = [ peakWindowLeft : peakWindowRight ];
         avgMaxValue = mean(y(window));
         
     end

@@ -17,6 +17,7 @@ arguments (Repeating)
 end
 arguments
     options.SmoothWindow (1,1) double = 5
+    options.PeakRadius (1,1) double = 5
     %
     options.PlottedDensity = "summedODy"
     %
@@ -88,7 +89,7 @@ for j = 1:length(RunDatas)
     
     for ii = 1:size(avg_ads{j},2)
        widths{j}(ii) = fracWidth( X{j}, avg_ads{j}(ii).(plottedDensity), options.WidthFraction, ...
-           'PeakRadius',5,'SmoothWindow',options.SmoothWindow);
+           'PeakRadius',options.PeakRadius,'SmoothWindow',options.SmoothWindow);
     end
      
 end

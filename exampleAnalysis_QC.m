@@ -51,20 +51,29 @@ clear condition varied_var heldvars_each legendvars_each heldvars_all legendvars
 
 % condition = {'RunID', '12_15', 'RunNumber',...
 %     makeRunNumberList([32:37])};
-
+% 
 % varied_var = 'LatticeHold';
-% heldvars_each = {'PiezoModFreq'};
-% legendvars_each = {'VVA1064_Er', 'VVA915_Er', 'PiezoModFreq'};
+% heldvars_each = 
+% legendvars_each = 
 % heldvars_all = {};
-% legendvars_all = {'VVA1064_Er', 'VVA915_Er', 'PiezoModFreq'};
+% legendvars_all = 
 % piezo_freq_tag = 1;
 
 %%%%%%%%%%%%%%%%%%%%%%%%
 %%% Later Drive Runs %%%
 
 % Still need to write out the vars for these
-% condition = {'RunID', '12_16', 'RunNumber',...
-%     makeRunNumberList([9:16])};
+
+condition = {'RunID', '12_16', 'RunNumber',...
+    makeRunNumberList([9:12])};
+
+varied_var = 'PiezoModFreq';
+heldvars_each = {'LatticeHold','VVA1064_Er','VVA915_Er','PiezoAmp'};
+legendvars_each = {varied_var};
+heldvars_all = {'LatticeHold'};
+legendvars_all = heldvars_each;
+piezo_freq_tag = 1;
+
 % condition = {'RunID', '12_18', 'RunNumber',...
 %     makeRunNumberList([19:30])};
 % condition = {'RunID', '12_19', 'RunNumber',...
