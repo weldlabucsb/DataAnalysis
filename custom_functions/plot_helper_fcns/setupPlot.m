@@ -73,6 +73,10 @@ catch
     pass_vargs = {};
 end
 
+if ~rdclass(RunDatas)
+    RunDatas = {RunDatas};
+end
+
 %% Title
 
 if options.PlotTitle == ""

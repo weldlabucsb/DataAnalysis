@@ -61,7 +61,7 @@ pause;
 % specify which density you want
 plotted_density = 'summedODy';
 
-for j = 1:length(runDatas)
+for j = 1:length(RunDatas)
     [expansion_plot{j}, expansion_plot_filename{j}] = stackedExpansionPlot(RunDatas{j},1,...
         varied_var,legendvars_each,heldvars_each,...
         'PlottedDensity',plotted_density);
