@@ -24,6 +24,8 @@ As seen in exampleAnalysis_QC.m, the process of picking out the runs you want ca
 
 - setupPlotWrap: a wrapper function for setupPlot that allows you to feed it the full options struct of your plot function, so that the copy/pasted block doesn't end up being quite so obnoxious. Call it like this:
 
+- collectRunDatas.mlapp: this function is used to generate selected RunDatas from a RunDataLibrary, which presumably is generated from autoLibraryGenerator application. Take that RunDataLibrary, load it into matlab, and then call this function. 
+
 ```matlab
 [plot_title, figure_filename] = setupPlotWrap( figure_handle, options, RunDatas, dependent_var, varied_variable_name, legendvars, varargin);
 ```
