@@ -1,6 +1,6 @@
 # Data Analysis Package
 
-The idea was to package together a bunch of functions that make building plots and analyzing data from RunDatas much easier. Includes a tool (GetRunDatas) for streamlining pulling a RunDataLibrary from a datatable.csv using DataManager.
+The idea was to package together a bunch of functions that make building plots and analyzing data from RunDatas much easier.
 
 ## Getting Started
 Read through the following tutorials.
