@@ -19,6 +19,9 @@ end
 % selectRuns GUI.
 
 selectRuns(DATA);
+% Added pause so that you can select your data before continuing. Just
+% press any key in the MatLab command window to continue once you're done.
+pause; 
 
 % selectRuns saves a cell array ("RunDatas") of the selected runDatas to
 % the workspace, as well as the variable selections ("RunVars") (for which
@@ -30,7 +33,6 @@ selectRuns(DATA);
 % RunVars also contains the generating condition for this set of runs, in
 % case you want to save it and generate the same subset of runs from DATA
 % in the future (without using the GUI).
-
 
 %%% unpack the runvars: %%%
 % You'll use these as the arguments to your plotFunctions to specify how
