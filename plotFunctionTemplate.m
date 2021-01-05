@@ -56,8 +56,8 @@ arguments
     %
     options.PlotTitle = "" % leave as is if you want auto-title
     %
-    options.xLim (1,2) double = [0,0]
-    options.yLim (1,2) double = [0,0]
+    options.xLim (1,2) double = [0,0] % leave as [0, 0] to NOT set limits
+    options.yLim (1,2) double = [0,0] % leave as [0, 0] to NOT set limits
     %
     options.PlotPadding = 0;
 end
