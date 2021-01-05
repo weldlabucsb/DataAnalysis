@@ -48,13 +48,13 @@ arguments
     options.LegendFontSize (1,1) double = 16
     options.TitleFontSize (1,1) double = 20
     %
-    options.Interpreter (1,1) string = "latex"
+    options.Interpreter (1,1) string = "latex" % alt: 'none', 'tex'
     %
-    options.LegendLabels = [] % don't specify this if you want auto-labels
-    options.LegendTitle string = "" % don't specify if you want auto-title
+    options.LegendLabels = [] % leave as is if you want auto-labels
+    options.LegendTitle string = "" % leave as is if you want auto-title
     options.Position (1,4) double = [2561, 27, 1920, 963];
     %
-    options.PlotTitle = "" % don't specify this if you want the auto-title
+    options.PlotTitle = "" % leave as is if you want auto-title
     %
     options.xLim (1,2) double = [0,0]
     options.yLim (1,2) double = [0,0]
@@ -67,6 +67,7 @@ end
     % with. Here I wanted those values associated with each RunData
     % individually, so I looped over the RunDatas and repeat-averaged each
     % one.
+    vars_to_be_averaged = {'summedODy','cloudSDy'};
     for j = 1:length(RunDatas)
         [avg_atomdata{j}, varied_var_values{j}] = avgRepeats(...
             RunDatas{j}, varied_variable_name, vars_to_be_averaged);

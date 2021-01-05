@@ -4,7 +4,7 @@
 % with autoLibGen (or otherwise). You'll obviously need to change
 % these paths.
 data_dir = 'G:\My Drive\_WeldLab\Code\Analysis\_DataAnalysis\_data_loading\Data';
-data_file = '15-Dec-2020_23-Dec-2020.mat';
+data_file = '09-Dec-2020_05-Jan-2021.mat';
 data_path = fullfile(data_dir,data_file);
 
 if ~exist('DATA','var')
