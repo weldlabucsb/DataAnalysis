@@ -49,6 +49,7 @@ arguments
     options.Interpreter (1,1) string = "latex"
     %
     options.LegendLabels = []
+    options.PlotEvery (1,1) double = 1
     options.LegendTitle string = ""
     options.Position (1,4) double = [0, 0, 1280, 720];
     %
@@ -116,38 +117,80 @@ end
 % of legend variables.
 if isempty(options.LegendLabels) && ~isempty(legendvars)
     
-    % compute the values of each legend variable and add to legend
-    for j = 1:length(RunDatas)
+    % grab the values of each legend variable and add to legend
+    if length(RunDatas) > 1 % handle case for "all" legendvars
+        for j = 1:length(RunDatas)
+            for k = 1:length(legendvars)
+                if isfield(RunDatas{j}.vars,legendvars{k})
+                % look at rundata to pull value of legend variables
+                    legendvals{j}{k} = RunDatas{j}.vars.(legendvars{k});
+                elseif ~isfield(RunDatas{j}.vars,legendvars{k}) ...
+                        && isfield(RunDatas{j}.Atomdata(1).vars,legendvars{k})
+                % if legendvar not part of rundata, look at atomdata
+                    legendvals{j}{k} = unique( arrayfun( @(x) x.vars.(legendvars{k}), RunDatas{j}.Atomdata ));
+                else
+                % error if the legendvar is not a field of RunData or atomdata
+                    legendvals{j}{k} = "Err";
+                    disp(strcat("The legend variable '",legendvars{k},...
+                        "' does not exist in RunData or Atomdata. Did you misspell it?"));
+                end
+            end
+        end
+
+        % stick the values together into proper legend labels.
+        for j = 1:length(RunDatas)
+            labels(j) = strcat(RunDatas{j}.RunNumber, ": ");
+
+            thisvarval = num2str(legendvals{j}{1});
+            labels(j) = strcat(labels(j), thisvarval, ", " );
+            for k = 2:(length(legendvars)-1)
+                thisvarval = num2str( legendvals{j}{k} );
+                labels(j) = strcat(labels(j), thisvarval, ", " );
+            end
+            labels(j) = strcat(labels(j), num2str( legendvals{j}{end} ));
+        end
+        
+    else % handle case for "each" legendvars
         for k = 1:length(legendvars)
-            if legendvars{k} ~= "PiezoModFreq" && isfield(RunDatas{j}.vars,legendvars{k})
-            % look at rundata to pull value of legend variables
-                legendvals{j}{k} = RunDatas{j}.vars.(legendvars{k});
-            elseif ~isfield(RunDatas{j}.vars,legendvars{k}) || legendvars{k} == "PiezoModFreq"
-            % if legendvar not part of rundata, look at atomdata
-                legendvals{j}{k} = unique( arrayfun( @(x) x.vars.(legendvars{k}), RunDatas{j}.Atomdata ));
+            if isfield(RunDatas{1}.vars,legendvars{k})
+               legendvals{k} = RunDatas{1}.vars.(legendvars{k});
+            elseif ~isfield(RunDatas{1}.vars,legendvars{k}) ...
+                    && isfield(RunDatas{1}.Atomdata(1).vars,legendvars{k})
+                avg_ad = avgRepeats(RunDatas{1},varied_variable_name,legendvars{k});
+                legendvals{k} = [avg_ad.(legendvars{k})];
             else
-            % error if the legendvar is not a field of RunData or atomdata
-                legendvals{j}{k} = "Err";
+                legendvals{k} = "Err";
                 disp(strcat("The legend variable '",legendvars{k},...
                     "' does not exist in RunData or Atomdata. Did you misspell it?"));
             end
         end
-    end
-
-    % stick the values together into proper legend labels.
-    for j = 1:length(RunDatas)
-        labels(j) = strcat(RunDatas{j}.RunNumber, ": ");
-
-        thisvarval = num2str(legendvals{j}{1});
-        labels(j) = strcat(labels(j), thisvarval, ", " );
-        for k = 2:(length(legendvars)-1)
-            thisvarval = num2str( legendvals{j}{k} );
-            labels(j) = strcat(labels(j), thisvarval, ", " );
+        
+%         legendvals = legendvals(1:options.PlotEvery:end);
+        legendvals = cellfun(@(x) x(1:options.PlotEvery:end), legendvals, ...
+            'UniformOutput', false);
+        
+        % check that the number of values matches the number of plots
+        for ii = 1:length(legendvals)
+            if ii == 1
+                right_length = true;
+                thislength = length(legendvals{1});
+            else
+                right_length = right_length && (thislength == length(legendvals{ii}));
+                if ~right_length
+                    disp(strcat("The legend variable '",legendvals{ii},"' has more/less values than the number of plots."));
+                    return;
+                end
+            end
         end
-        labels(j) = strcat(labels(j), num2str( legendvals{j}{end} ));
+        
+        
+        % stick the values together into proper legend labels.
+        labels = string(legendvals{1});
+        for ii = 2:length(legendvals)
+            labels = arrayfun( @(x,y) strcat(x,y),labels,string(legendvals{ii}));
+        end
+        
     end
-    
-    
     
 else
     labels = string(cellfun( @(x) x.RunNumber, RunDatas, 'UniformOutput', false));

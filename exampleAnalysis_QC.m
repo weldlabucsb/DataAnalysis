@@ -93,6 +93,20 @@ plotted_density = 'summedODx';
     'SmoothWindow',10,...
     'WidthFraction',0.65);
 
+%% Oort Zoom Plot
+
+plotted_density = 'summedODy';
+
+for j = 1:length(RunDatas)
+    [oort_zoom_plot{j}, oort_filename{j}] = oortZoomPlot(...
+        RunDatas{j},...
+        varied_var,...
+        legendvars_each,...
+        heldvars_each,...
+        'SmoothWindow',7,...
+        'PlottedDensity',plotted_density);
+end
+
 %% Specify Output Directories and Save the Figures
 
 analysis_output_dir = "G:\My Drive\_WeldLab\Code\Analysis\_DataAnalysis\_out";
@@ -106,6 +120,7 @@ expansion_plot_dir = strcat( analysis_output_dir, filesep, "expansion_plots");
 saveFigure(expansion_plot, expansion_plot_filename, expansion_plot_dir);
 saveFigure(width_evo_plot, width_evo_filename, analysis_output_dir);
 saveFigure(centers_plot, centers_plot_filename, analysis_output_dir);
+saveFigure(oort_zoom_plot, oort_filename, expansion_plot_dir);
 
 %% Open the Ouput Directory
 % Because I am lazy and don't want to navigate to the directory where the

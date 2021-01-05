@@ -67,7 +67,6 @@ end
     
     N = length(varied_var_values);
     offset = zeros(N,1);
-    labels = strings(N,1);
     plotMe = [];
     
     expansion_plot = figure();
@@ -85,28 +84,17 @@ end
         x = 1:length(plotMe(ii,:));
         h = plot( xConvert * x, plotMe(ii,:) );
         h.LineWidth = 2;
-        
-        % this is a relic of something that was done to make this not break
-        % non - vary LatticeHold runs when running doit.
-        if isa(varied_var_values(1),'datetime')
-            labels(ii) = datestr(varied_var_values(ii));
-        else
-            labels(ii) = string(num2str(varied_var_values(ii)));
-        end
-        % end of relic
-        
     end
     
     %%
     
     options.yLim = [ min(min(plotMe)), max(max(plotMe)) ];
-    options.LegendLabels = labels;
     
     dependent_var = options.PlottedDensity;
 
     %% Setup Plot
     
-    [plot_title, figure_filename] = ...
+    [expansion_plot, figure_filename] = ...
         setupPlotWrap( ...
             expansion_plot, ...
             options, ...
