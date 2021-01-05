@@ -107,12 +107,14 @@ for j = 1:length(RunDatas)
         'PlottedDensity',plotted_density);
 end
 
-%% Specify Output Directories and Save the Figures
+%% Specify Output Directories
 
 analysis_output_dir = "G:\My Drive\_WeldLab\Code\Analysis\_DataAnalysis\_out";
 
 % I want to put the expansion plots in their own subdirectory.
 expansion_plot_dir = strcat( analysis_output_dir, filesep, "expansion_plots");
+
+%% Save the Figures
 
 % This saveFigure function takes in the figure handle, filename, and the
 % directory you'd like to save it in. Automatically handles filesep. Saves
