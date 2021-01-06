@@ -22,7 +22,7 @@ arguments
     %
     %
     %
-    options.yLabel string = ""
+    options.yLabel string = "Center Position ($\mu$m)"
     options.yUnits string = ""
     %
     options.xLabel string = varied_variable_name
@@ -44,20 +44,9 @@ arguments
     options.yLim (1,2) double = [0,0]
     %
     options.PlotPadding = 0
-    %
-    options.PiezoFreqTag = 1
 end
 
 plottedDensity = options.PlottedDensity;
-
-if varied_variable_name ~= "VVA915_Er"
-    options.LegendTitle = "1064-915 Depth (Er)";
-    add_915_tag = 1;
-else
-    add_915_tag = 0;
-end
-
-add_piezo_freq_tag = options.PiezoFreqTag;
 
 %% Camera Params
 
