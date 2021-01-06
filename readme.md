@@ -10,12 +10,32 @@ Read through the following tutorials.
 ## DataManager
 A RunDataLibrary of all the data you'd like to consider can be loaded from the Data folders on the citadel using the autoLibGen app contained in dataManager. See [the dataManager GitHub](https://github.com/weldlabucsb/dataManager) to get dataManager and view the documentation on autoLibGen.
 
+### selectRuns
 Once you have your initial RunDataLibrary, you can select subsets of this data using the selectRuns app. It takes a RunDataLibrary as its argument, which you will supply as the large RunDataLibrary you generated using autoLibGen. Call it with "selectRuns(DATA)", where DATA is your RunDataLibrary.
 ```matlab
 selectRuns(DATA);
 ```
-From here, you can select the runs you'd like to plot. It also asks for the dependent variable (a cicero variable name) for your plots, and any cicero variable names that are held constant across one (helvars_each) or all (heldvars_all) runs. Clicking the button will put three variables into your workspace: RunDatas, RunDataLib, and RunVars.
-    - If you include selectRuns in your script, be sure to put a pause afterward so that you can take your time selecting data before continuing.
+This will produce a GUI that looks like this:
+![the selectRuns GUI](https://imgur.com/r4z8QNS)
+Note that when you first open the GUI, the lower tables will not yet be populated.
+
+From here, you can select the runs you'd like to plot by toggling the checkboxes at right. 
+    - You can select multiple runs at once by clicking into one of the rows to highlight a cell on that row, then holding shift and clicking a cell on a different row to highlight all the cells in between. You can then toggle all of their checkboxes by clicking the button at right.
+
+Once you have the desired runs selected (checkboxes toggled), click the "Generate ..." button (step 3) to save the RunDataLibrary to your workspace. 
+    - This may generate MANY error messages, if some variables were added to atomdata in the later runs and are not present in others, but this is okay.
+
+The app then reads out the variables stored in the RunDataLibrary you just built. It puts a list of any variables which take more than one value across all the selected runs into the leftmost column, under "Step 4". Select the independent variable for the set of runs you've selected. 
+    - The number of unique values for each variable are specified to help you identify which might be the varied variable for those runs.
+    - If the one you expect does not appear in the list, you can specify it manually in the box below, checking the box to specify that you want to use the manual value.
+
+You can also select variables which were held constant within each run (heldvars each: middle table) or across all runs (heldvars all: right table). This list is populated with all of the variables stored in the RunDataLibrary. These are used for automatic generation of the legend, title, and axes labels.
+    - Again, variables can be specified manually below each table. For the heldvars tables, you can check values __and__ specify manual variables. All of them will be included in the RunVars struct.
+    - Multiple manual variables can be specified as comma-delimited variable names. Spaces are fine.
+
+Clicking the "Step 6" button will put the RunVars variable into your workspace. I've included a function called __unpackRunDatas__ that can be used to split this into the variables used by the plotFunctions. See below for details.
+    - If you include selectRuns in line with your script, be sure to put a pause afterward so that you can take your time selecting data before continuing.
+    - One can also just leave selectRuns open on their computer, reselecting data and re-running plotFunctions in real time to analyze different subsets of data.
 
 ## Useful functions:
 
