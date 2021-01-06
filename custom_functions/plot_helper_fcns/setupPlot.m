@@ -187,7 +187,7 @@ if isempty(options.LegendLabels) && ~isempty(legendvars)
         % stick the values together into proper legend labels.
         labels = string(legendvals{1});
         for ii = 2:length(legendvals)
-            labels = arrayfun( @(x,y) strcat(x,y),labels,string(legendvals{ii}));
+            labels = arrayfun( @(x,y) strcat(x,", ",y),labels,string(legendvals{ii}));
         end
         
     end
