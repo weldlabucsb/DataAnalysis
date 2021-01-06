@@ -85,8 +85,15 @@ Clicking the "Step 6" button will put the RunVars variable into your workspace. 
     ```matlab
         averaged_atomdata = avgRepeats(RunDatas, varied_variable, variables_to_be_averaged);
     ```
+    
+- __saveFigure__ takes a figure handle, filename, and output_folder_path. Saves the figure specified by the figure handle to fullfile(output_folder_path,filename).
+    - Accepts cell arrays of figure handles and filenames. Must be the same length.
+    
+## Existing PlotFunctions
+    - stackedExpansionPlot
+    - widthEvolutionPlot
+    - oortZoomPlot
+    - centersPlot
 
 ## Current State of Affairs
-I've so far built a couple plotting functions based on this functionality, such as stackedExpansionPlot and widthEvolutionPlot. More will follow.
-
 The custom functions also include a few of my fitting functions that are holdovers from an older version of my analysis code. fracWidth works reasonably well (to find the width at which a function hits a fraction of its maximum value), but still chokes on noisy distributions. I would not expect the rest to work well until I update them.
