@@ -6,8 +6,8 @@ function [fig_handle, fig_filename] = plotFunctionTemplate(RunDatas,varied_varia
 % 
 %         I recommend starting out by not touching the optional arguments.
 %
-% The RunDatas input can either be a single RunData object, or a cell array
-% of RunData objects.
+% The RunDatas input should be a cell array of RunData objects (even if
+% there is only one RunData)
 %
 % varied_variable_name is the cicero variable name (as a string) of the
 % independent variable for the RunDatas you've provided.
