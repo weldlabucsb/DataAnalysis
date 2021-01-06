@@ -67,7 +67,7 @@ end
     % with. Here I wanted those values associated with each RunData
     % individually, so I looped over the RunDatas and repeat-averaged each
     % one.
-    vars_to_be_averaged = {'summedODy','cloudSDy'};
+    vars_to_be_averaged = {'summedODy','cloudSD_y'};
     for j = 1:length(RunDatas)
         [avg_atomdata{j}, varied_var_values{j}] = avgRepeats(...
             RunDatas{j}, varied_variable_name, vars_to_be_averaged);
@@ -123,6 +123,12 @@ end
     for j = 1:length(RunDatas)
         % Since fracWidth wants an x-axis, I generated one here for the jth
         % RunData. The details aren't important.
+        
+        % getting the pixel/um conversion this way requires paramsfnc
+        % (found in StrontiumData/ImageAnalysisSoftware/v6/)
+        [~,~,pixelsize,mag] = paramsfnc('ANDOR');
+        xConvert = pixelsize/mag * 1e6; % convert from pixel to um
+        
         X{j} = ( 1:size( avg_atomdata{j}(1).summedODy, 2 ) ) * xConvert;
         
         % Here I compute each fracWidth from the repeat-averaged densities
@@ -151,7 +157,7 @@ end
     % different variable names for the figure_title_dependent_var or
     % fig_handle.
     
-    [plot_title, figure_filename] = ...
+    [plot_title, fig_filename] = ...
         setupPlotWrap( ...
             figure_handle, ...
             options, ...
