@@ -49,10 +49,9 @@ function [avg_atomdata, varied_var_values]  = avgRepeats(RunDatas, varied_variab
        elseif all( arrayfun(@(x) isfield(x,varnames{j}), ads ) )
            varnameIsAtomDataVar{j} = 0;
        else
-          disp(['The provided variable (',varnames{j},') is not present in ' ...
+          error(['The provided variable (',varnames{j},') is not present in ' ...
               'Atomdata or Atomdata.vars for one or more runs. Did you spell ' ...
-              'the variable name correctly?'])
-          return
+              'the variable name correctly?']);
        end
     end
     
