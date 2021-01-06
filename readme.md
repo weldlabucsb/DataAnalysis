@@ -16,7 +16,9 @@ Once you have your initial RunDataLibrary, you can select subsets of this data u
 selectRuns(DATA);
 ```
 This will produce a GUI that looks like this:
-![the selectRuns GUI](https://imgur.com/r4z8QNS)
+
+![the selectRuns GUI](https://i.imgur.com/R2uVqbD.png)
+
 Note that when you first open the GUI, the lower tables will not yet be populated.
 
 From here, you can select the runs you'd like to plot by toggling the checkboxes at right. 
