@@ -90,10 +90,14 @@ Clicking the "Step 6" button will put the RunVars variable into your workspace. 
     - Accepts cell arrays of figure handles and filenames. Must be the same length.
     
 ## Existing PlotFunctions
-- stackedExpansionPlot
-- widthEvolutionPlot
-- oortZoomPlot
-- centersPlot
+The plot functions sort of naturally fall into two categories: plots for visualizing a single run (like a stacked expansion plot), and plots for visualizing multiple runs on the same axes. I'll start labeling the docstrings of the plotfunctions with [one plot per run] or [multi-run plot] just after the function name.
+
+I typically put the single-run plotfunctions in a for-loop, and loop over the RunDatas I'm looking at. The multi-run plots will just take the entire cell array of RunDatas as is. See exampleAnalysis.m for an example.
+
+- stackedExpansionPlot [one run per plot]
+- widthEvolutionPlot [multi-run plot]
+- oortZoomPlot [one run per plot]
+- centersPlot [multi-run plot]
 
 ## Current State of Affairs
 The custom functions also include a few of my fitting functions that are holdovers from an older version of my analysis code. fracWidth works reasonably well (to find the width at which a function hits a fraction of its maximum value), but still chokes on noisy distributions. I would not expect the rest to work well until I update them.
