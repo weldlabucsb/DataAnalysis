@@ -31,6 +31,11 @@ function [fig_handle, fig_filename] = plotFunctionTemplate(RunDatas,varied_varia
 
 % Just copy-paste this arguments list. You can of course add more arguments
 % to your own functions.
+%
+% NOTE: 2021-01-06 I've now updated the setupPlotWrap function so that if
+% you do not specify the options I've provided here, they will
+% automatically be set to the default values. The options struct must still
+% exist, but you don't need to set all these options if you prefer not to.
 arguments
     RunDatas
     varied_variable_name
