@@ -12,6 +12,9 @@ arguments (Repeating)
     varargin
 end
 arguments
+    %
+    options.FracHeightYLim = 0.2 % ylim set to this*max(density(1))
+    %
     options.SmoothWindow = 7; % movmean smoothing window
     %
     options.PlottedDensity = "summedODy"
@@ -86,7 +89,8 @@ end
     
     %% Get the bounds from fracheight
     
-    [~,~,~,~,theheight] = fracWidth(X,avg_atomdata(1).(plotted_dens),0.125);
+    [~,~,~,~,theheight] = ...
+        fracWidth(X,avg_atomdata(1).(plotted_dens),options.FracHeightYLim);
     theminheight = min( min( avg_atomdata(1).(plotted_dens) ), -50);
     options.yLim = [theminheight theheight];
     

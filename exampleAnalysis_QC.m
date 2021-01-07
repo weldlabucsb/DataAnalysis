@@ -51,6 +51,17 @@ pause;
 % variables for plots which contain multiple runs (such as
 % widthEvolutionPlot).
 
+%% Specify Output Directories
+
+% analysis_output_dir = "G:\My Drive\_WeldLab\Code\Analysis\_DataAnalysis\_out\slowPhason_plots";
+output_start_dir = "G:\My Drive\_WeldLab\Code\Analysis\_DataAnalysis\_out";
+analysis_output_dir = uigetdir(output_start_dir,...
+    "Choose where to save the plots.");
+
+% I want to put the expansion plots in their own subdirectory.
+expansion_plot_dir = strcat( analysis_output_dir, filesep, "expansion_plots");
+oort_plot_dir = strcat( analysis_output_dir, filesep, "oort_zoom_plots");
+
 %% Now you can call your plotfunctions!
 
 %% Stacked Expansion Plots 
@@ -61,6 +72,7 @@ pause;
 % specify which density you want
 plotted_density = 'summedODy';
 
+clear('expansion_plot','expansion_plot_filename');
 for j = 1:length(RunDatas)
     [expansion_plot{j}, expansion_plot_filename{j}] = stackedExpansionPlot(RunDatas{j},1,...
         varied_var,legendvars_each,heldvars_each,...
@@ -80,23 +92,37 @@ end
     'yLim',[0,200],...
     'SmoothWindow',10);
 
-%% Center Positions Plot
+%% Center Positions Plot Y
+
+% specify which density you want
+plotted_density = 'summedODy';
+
+[centers_plot_y, centers_plot_filename_y] = ...
+    centersPlot(RunDatas,...
+    varied_var,legendvars_all,heldvars_all,...
+    'PlottedDensity',plotted_density,...
+    'yLim',[0 0],...
+    'SmoothWindow',10,...
+    'WidthFraction',0.55);
+
+%% Center Positions Plot X
 
 % specify which density you want
 plotted_density = 'summedODx';
 
-[centers_plot, centers_plot_filename] = ...
+[centers_plot_x, centers_plot_filename_x] = ...
     centersPlot(RunDatas,...
     varied_var,legendvars_all,heldvars_all,...
     'PlottedDensity',plotted_density,...
-    'yLim',[78,90],...
+    'yLim',[0 0],...
     'SmoothWindow',10,...
-    'WidthFraction',0.65);
+    'WidthFraction',0.55);
 
 %% Oort Zoom Plot
 
 plotted_density = 'summedODy';
 
+clear('oort_zoom_plot','oort_filename');
 for j = 1:length(RunDatas)
     [oort_zoom_plot{j}, oort_filename{j}] = oortZoomPlot(...
         RunDatas{j},...
@@ -104,15 +130,9 @@ for j = 1:length(RunDatas)
         legendvars_each,...
         heldvars_each,...
         'SmoothWindow',7,...
-        'PlottedDensity',plotted_density);
+        'PlottedDensity',plotted_density,...
+        'FracHeight');
 end
-
-%% Specify Output Directories
-
-analysis_output_dir = "G:\My Drive\_WeldLab\Code\Analysis\_DataAnalysis\_out";
-
-% I want to put the expansion plots in their own subdirectory.
-expansion_plot_dir = strcat( analysis_output_dir, filesep, "expansion_plots");
 
 %% Save the Figures
 
@@ -121,8 +141,9 @@ expansion_plot_dir = strcat( analysis_output_dir, filesep, "expansion_plots");
 % the figure with that filename to the specified path.
 saveFigure(expansion_plot, expansion_plot_filename, expansion_plot_dir);
 saveFigure(width_evo_plot, width_evo_filename, analysis_output_dir);
-saveFigure(centers_plot, centers_plot_filename, analysis_output_dir);
-saveFigure(oort_zoom_plot, oort_filename, expansion_plot_dir);
+saveFigure(centers_plot_y, centers_plot_filename_y, analysis_output_dir);
+saveFigure(centers_plot_x, centers_plot_filename_x, analysis_output_dir);
+saveFigure(oort_zoom_plot, oort_filename, oort_plot_dir);
 
 %% Open the Ouput Directory
 % Because I am lazy and don't want to navigate to the directory where the
