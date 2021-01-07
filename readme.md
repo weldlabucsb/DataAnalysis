@@ -90,10 +90,10 @@ Clicking the "Step 6" button will put the RunVars variable into your workspace. 
     - Accepts cell arrays of figure handles and filenames. Must be the same length.
     
 ## Existing PlotFunctions
-    - stackedExpansionPlot
-    - widthEvolutionPlot
-    - oortZoomPlot
-    - centersPlot
+- stackedExpansionPlot
+- widthEvolutionPlot
+- oortZoomPlot
+- centersPlot
 
 ## Current State of Affairs
 The custom functions also include a few of my fitting functions that are holdovers from an older version of my analysis code. fracWidth works reasonably well (to find the width at which a function hits a fraction of its maximum value), but still chokes on noisy distributions. I would not expect the rest to work well until I update them.
