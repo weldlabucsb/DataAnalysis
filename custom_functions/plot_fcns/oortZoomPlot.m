@@ -1,5 +1,5 @@
 function [oort_zoom_plot, fig_filename] = oortZoomPlot(RunDatas,varied_variable_name,legendvars,varargin,options)
-% OORTZOOMPLOT creates a vertically-zoomed gif and shadow plot of the
+% OORTZOOMPLOT [one plot per run] creates a vertically-zoomed gif and shadow plot of the
 % densities in RunDatas versus the varied variable. Repeat-averages all
 % RunDatas here.
 

@@ -1,9 +1,13 @@
 function [fig_handle, fig_filename] = plotFunctionTemplate(RunDatas,varied_variable_name,legendvars,varargin,options)
 % PLOTFUNCTIONTEMPLATE makes a plot from the given RunDatas against the
-% dependent variable {varied_variable_name}. Optional arguments are passed
+% dependent variable {varied_variable_name}. This is an example of a plot
+% for visualizing multiple runs on the same axes. For an example of a plot
+% which visualizes each run on its own plot, see stackedExpansionPlot.m.
+%
+% Optional arguments are passed
 % to setupPlot, which automatically puts axes and a legend on the plot,
 % resizes the axes, etc.
-% 
+%
 %         I recommend starting out by not touching the optional arguments.
 %
 % The RunDatas input should be a cell array of RunData objects (even if

@@ -1,6 +1,6 @@
 function [expansion_plot, figure_filename] = stackedExpansionPlot(RunDatas,offset_tag,varied_variable_name,legendvars, varargin,options)
-% STACKEDEXPANSIONPLOT  Generate stacked expansion plot from avg'd
-% RunDatas.
+% STACKEDEXPANSIONPLOT [one plot per run]. Generate stacked expansion plot
+% from avg'd RunDatas.
 %
 %   offset_tag toggles whether the plots should be offset or overlaid.
 %

@@ -1,7 +1,7 @@
 function [width_evo_plot, figure_filename] = widthEvolutionPlot(RunDatas,varied_variable_name,legendvars,varargin,options)
-% WIDTHEVOLUTIONPLOT makes a plot of how the width of the evolution evolves
-% with respect to {varied_variable_name}. Inherits optional arguments from
-% setupPlot.
+% WIDTHEVOLUTIONPLOT [multi-run plot] makes a plot of how the width of the
+% evolution of runs evolve with respect to {varied_variable_name}. Plots
+% evolution of multiple runs on same axes.
 %
 % legendvars must be specified as a cell array of strings. The names of
 % the variables are used as the title of the legend, and their values for
