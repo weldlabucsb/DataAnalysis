@@ -17,7 +17,7 @@ selectRuns(DATA);
 ```
 This will produce a GUI that looks like this:
 
-<img src="https://i.imgur.com/R2uVqbD.png" alt="the selectRuns GUI" width="500"/>
+<img src="https://i.imgur.com/R2uVqbD.png" alt="the selectRuns GUI" width="600"/>
 
 Note that when you first open the GUI, the lower tables will not yet be populated.
 
