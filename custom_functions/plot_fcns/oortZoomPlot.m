@@ -2,6 +2,8 @@ function [oort_zoom_plot, fig_filename] = oortZoomPlot(RunDatas,varied_variable_
 % OORTZOOMPLOT [one plot per run] creates a vertically-zoomed gif and shadow plot of the
 % densities in RunDatas versus the varied variable. Repeat-averages all
 % RunDatas here.
+%
+% NOTE: Doesn't currently make the GIF.
 
 arguments
     RunDatas
@@ -22,7 +24,8 @@ arguments
     options.GIFFrameTime (1,1) double = 0.1 % frame time in seconds
     %
     options.ShadowOffset (1,1) double = 4 % offsets the lightest trace from white
-    options.PlotEvery (1,1) double = 4 % cleaner to only plot every 3 or so densities
+    options.NumberShadowTraces (1,1) double = 5 % makes 4 shadow traces
+    options.PlotEvery (1,1) double = 1 % overrides the above option. Leave as 1 to not override.
     %
     options.LineWidth (1,1) double = 1
     %
@@ -68,11 +71,22 @@ end
 %%
     
     oort_zoom_plot = figure();
-    N_shadow_traces = round(length(avg_atomdata) / options.PlotEvery);
-    offset = options.ShadowOffset;
-    cmap = flip(bone( N_shadow_traces + offset ));
-    
     figure_title_dependent_var = 'Density (Zoomed)';
+    
+%% Figure out how many plots to make
+
+    if isfield(options,'PlotEvery')
+       if options.PlotEvery == 1
+           options.
+       end
+    end
+
+    N_shadow_traces = round(length(avg_atomdata) / options.PlotEvery);
+    
+%% Set up the colormap
+
+    offset = options.ShadowOffset; % shift so that the lightest color isn't white
+    cmap = flip(bone( N_shadow_traces + offset ));
     
     %% Make the Shadow Plot
     
