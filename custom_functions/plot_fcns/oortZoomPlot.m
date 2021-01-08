@@ -89,10 +89,16 @@ end
     
     %% Get the bounds from fracheight
     
-    [~,~,~,~,theheight] = ...
-        fracWidth(X,avg_atomdata(1).(plotted_dens),options.FracHeightYLim);
-    theminheight = min( min( avg_atomdata(1).(plotted_dens) ), -50);
-    options.yLim = [theminheight theheight];
+    if ~isfield(options,'yLim')
+        options.yLim = [0 0]; % set to default if not set
+    end
+    
+    if all(options.yLim == [0 0])
+        [~,~,~,~,theheight] = ...
+            fracWidth(X,avg_atomdata(1).(plotted_dens),options.FracHeightYLim);
+        theminheight = min( min( avg_atomdata(1).(plotted_dens) ), -50);
+        options.yLim = [theminheight theheight];
+    end
     
     %%
     
