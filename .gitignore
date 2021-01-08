@@ -7,4 +7,5 @@
 *.zip
 *.fig
 *.csv
+*.ini
 /out
