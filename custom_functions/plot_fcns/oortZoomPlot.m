@@ -77,7 +77,7 @@ end
 
     if isfield(options,'PlotEvery')
        if options.PlotEvery == 1
-           options.PlotEvery = floor(numel(RunDatas.Atomdata)/(options.NumberShadowTraces-1));
+           options.PlotEvery = floor(numel(avg_atomdata)/(options.NumberShadowTraces-1));
        end
     end
     
