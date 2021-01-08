@@ -24,7 +24,7 @@ arguments
     options.GIFFrameTime (1,1) double = 0.1 % frame time in seconds
     %
     options.ShadowOffset (1,1) double = 4 % offsets the lightest trace from white
-    options.NumberShadowTraces (1,1) double = 5 % makes 4 shadow traces
+    options.NumberShadowTraces (1,1) double = 5 % fixes # of shadow traces. Might be off +/- 1.
     options.PlotEvery (1,1) double = 1 % overrides the above option. Leave as 1 to not override.
     %
     options.LineWidth (1,1) double = 1
@@ -77,7 +77,7 @@ end
 
     if isfield(options,'PlotEvery')
        if options.PlotEvery == 1
-           options.
+           options.PlotEvery = round(numel(RunDatas.Atomdata)/options.NumberShadowTraces);
        end
     end
 
@@ -91,6 +91,7 @@ end
     %% Make the Shadow Plot
     
     idx_to_plot = 1:options.PlotEvery:length(avg_atomdata);
+    
     for ii = 1:length(idx_to_plot)
         toplot = movmean(...
             avg_atomdata(idx_to_plot(ii)).(plotted_dens),...
