@@ -77,11 +77,13 @@ end
 
     if isfield(options,'PlotEvery')
        if options.PlotEvery == 1
-           options.PlotEvery = round(numel(RunDatas.Atomdata)/options.NumberShadowTraces);
+           options.PlotEvery = floor(numel(RunDatas.Atomdata)/(options.NumberShadowTraces-1));
        end
     end
+    
+    idx_to_plot = 1:options.PlotEvery:length(avg_atomdata);
 
-    N_shadow_traces = round(length(avg_atomdata) / options.PlotEvery);
+    N_shadow_traces = length(idx_to_plot);
     
 %% Set up the colormap
 
@@ -90,7 +92,7 @@ end
     
     %% Make the Shadow Plot
     
-    idx_to_plot = 1:options.PlotEvery:length(avg_atomdata);
+    
     
     for ii = 1:length(idx_to_plot)
         toplot = movmean(...
