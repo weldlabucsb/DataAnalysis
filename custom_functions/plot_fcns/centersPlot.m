@@ -12,6 +12,8 @@ arguments (Repeating)
 end
 arguments
     %
+    options.GaussFitCenter (1,1) logical = 0 % switches from fracwidth width finding to using gaussian fit center
+    %
     options.SmoothWindow = 5
     %
     options.PlottedDensity = "summedODy"
@@ -60,9 +62,16 @@ if ~rdclass(RunDatas)
     RunDatas = {RunDatas};
 end
 
+if plottedDensity == "summedODy"
+    cloudCenterVar = 'cloudCenter_y';
+elseif plottedDensity == "summedODx"
+    cloudCenterVar = 'cloudCenter_x';
+end
+
+avgd_vars = {plottedDensity,cloudCenterVar};
 for j = 1:length(RunDatas)
     [avg_ads{j}, varied_var_values{j}] = avgRepeats(...
-        RunDatas{j}, varied_variable_name, plottedDensity); 
+        RunDatas{j}, varied_variable_name, avgd_vars); 
 end
 
 %% Compute Widths
@@ -71,9 +80,17 @@ for j = 1:length(RunDatas)
     
     X{j} = ( 1:size( avg_ads{j}(1).(plottedDensity),2 ) ) * xConvert;
     
-    for ii = 1:size(avg_ads{j},2)
-       [widths{j}(ii), center{j}(ii)] = fracWidth( X{j}, avg_ads{j}(ii).(plottedDensity), options.WidthFraction, ...
-           'PeakRadius',5,'SmoothWindow',5);
+    if ~options.GaussFitCenter
+        center_type = 'FracWidth';
+        for ii = 1:size(avg_ads{j},2)
+           [widths{j}(ii), center{j}(ii)] = fracWidth( X{j}, avg_ads{j}(ii).(plottedDensity), options.WidthFraction, ...
+               'PeakRadius',5,'SmoothWindow',5);
+        end
+    else
+        center_type = 'Gauss Fit';
+        for ii = 1:size(avg_ads{j},2)
+            center{j}(ii) = avg_ads{j}(ii).(cloudCenterVar);
+        end
     end
     
 end
@@ -81,7 +98,7 @@ end
 %% Make Figure
 
 centers_plot = figure();
-dependent_var = strcat('Center Position (',options.PlottedDensity,')');
+dependent_var = strcat('Center Position (',options.PlottedDensity,') [',center_type,']');
 
 cmap = colormap( jet( length(RunDatas)));
 
