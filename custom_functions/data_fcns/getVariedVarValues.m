@@ -12,17 +12,6 @@ function varied_var_values = getVariedVarValues(RunDatas,varied_var_name)
     
     if whereThisVarLives == "runDataVars" || whereThisVarLives == "atomdataVars"
         
-%         for ii = 1:numel(RunDatas)
-%            varied_var_values{ii} = RunDatas{ii}.vars.(varied_var_name);
-%            if ii > 1
-%                cond = ~all( varied_var_values{ii-1} == varied_var_values{ii} );
-%                assert(cond,strcat("The repeat-avg'd ",run_date_list," don't have the same set of varied_var_values."));
-%            end
-%         end
-%         varied_var_values = varied
-        
-%     elseif whereThisVarLives == "atomdataVars"
-        
         avg_ad = avgRepeats(RunDatas,varied_var_name,varied_var_name);
         varied_var_values = [avg_ad.(varied_var_name)];
         
