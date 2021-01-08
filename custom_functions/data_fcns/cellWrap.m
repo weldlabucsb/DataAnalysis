@@ -5,8 +5,7 @@ function RunDatas = cellWrap(RunDatas)
 % This silly function exists because all most of my functions work on a
 % cell array of RunDatas.
 
-    class_flag = rdclass(RunDatas);
-    if ~class_flag
+    if ~rdclass(RunDatas)
         RunDatas = {RunDatas};
     end
     
