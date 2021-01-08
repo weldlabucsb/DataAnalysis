@@ -89,7 +89,7 @@ for j = 1:length(RunDatas)
     else
         center_type = 'Gauss Fit';
         for ii = 1:size(avg_ads{j},2)
-            center{j}(ii) = avg_ads{j}(ii).(cloudCenterVar);
+            center{j}(ii) = avg_ads{j}(ii).(cloudCenterVar) * 1e6;
         end
     end
     
