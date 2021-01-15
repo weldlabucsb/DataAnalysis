@@ -1,4 +1,4 @@
-function [plot_title, figure_filename] = setupPlot(figure_handle, RunDatas, plotted_dependent_var, varied_variable_name, legendvars, varargin, options)
+function [plot_title, figure_filename, legend_labels] = setupPlot(figure_handle, RunDatas, plotted_dependent_var, varied_variable_name, legendvars, varargin, options)
 % SETUPPLOT sets axes labels, title, legend, etc. Also outputs the plot
 % title and a figure filename (containing the same information as the plot
 % title), for use in saving figures.
@@ -120,6 +120,7 @@ else
 end
 
 options.LegendLabels = labels;
+legend_labels = labels; % nicely labeled as an output of the function
 
 if class(options.LegendLabels) == "string" || class(options.LegendLabels) == "char"
     % Legend Labeling
