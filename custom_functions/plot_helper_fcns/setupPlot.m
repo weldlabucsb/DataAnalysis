@@ -76,6 +76,10 @@ end
 
 RunDatas = cellWrap(RunDatas);
 
+%% Make the specified figure_handle active
+
+figure(figure_handle);
+
 %% Title
 
 if options.PlotTitle == ""
