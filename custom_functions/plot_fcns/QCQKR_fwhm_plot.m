@@ -25,8 +25,6 @@ function [fig_handle, fig_filename] = QCQKR_fwhm_plot(RunDatas,varied_variable_n
 %       time on the same axes), specify those variables in legendvars so
 %       that the runs will be labeled in the legend.
 
-% Just copy-paste this arguments list. You can of course add more arguments
-% to your own functions.
 arguments
     RunDatas
     varied_variable_name
