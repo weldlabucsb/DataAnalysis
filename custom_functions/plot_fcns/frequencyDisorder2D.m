@@ -122,8 +122,43 @@ varargin = {RunVars.heldvars_all};
         
         X{j} = ( 1:size( avg_atomdata{j}(1).summedODy, 2 ) ) * xConvert;
         
+        
+        PrimaryLatticeDepthVar = 'VVA1064_Er'; %Units of Er of the primary lattice
+        SecondaryLatticeVVAVar = 'Lattice915VVA'; %Units of Er of the secondary lattice
+        atomdata = RunDatas{j}.Atomdata;
         for ii = 1:size(avg_atomdata{j}, 2)
-            %find the center information
+            %do delta and J calculations
+            s1 = atomdata(ii).vars.(PrimaryLatticeDepthVar);
+            
+            secondaryPDPulseAmp = atomdata(ii).vars.('Scope_CH2_V0');
+            
+            secondaryErPerVolt = atomdata(ii).vars.ErPerVolt915;  % Calibration from KD for the secondary lattice            
+            secondaryPDGain = atomdata(ii).vars.PDGain915;  % Gain on PD
+
+            s2 = secondaryPDPulseAmp*secondaryErPerVolt/secondaryPDGain;
+            
+            la1 = PrimaryWavelength;
+            la2 = SecondaryWavelength;
+            
+            [J, Delta]  = J_Delta_Numeric(s1,s2,la1,la2,0);
+            DeltaPerJ = Delta/J;
+            % IF THIS THROWS AN ERROR, it's probably because the folder
+            % AubryAndre_J_and_Delta_from_Lattice  needs to be added to the
+            % path.  It's in the StrontiumData\Image Analysis Software
+            % folder
+            
+            % Setting tau as full width half max of trapezoidal pulse
+            tau_us = 1e6*(atomdata(ii).vars.('Scope_CH2_t2') - atomdata(ii).vars.('Scope_CH2_t1') - atomdata(ii).vars.('Scope_CH2_tr'));
+            
+            hbar_Er1064 = 7.578e-5; %Units of Er*seconds
+            hbar_Er1064_us = 75.78; %hbar in units of Er*microseconds
+            
+            tau = tau_us*J/hbar_Er1064_us;
+            
+            
+            Lambda{j}(ii) = Delta*tau/J;
+            
+            %normalize ODy distribution
             norm_distr = (avg_atomdata{j}(ii).summedODy)./norm(avg_atomdata{j}(ii).summedODy);
             
             
@@ -147,7 +182,7 @@ varargin = {RunVars.heldvars_all};
     figure_title_dependent_var = ['IPR ($\sum | \psi(x)|^4$)'];
     first_fig = figure(1);
     for j = 1:length(RunDatas)
-        plot( varied_var_values{j}, smoothdata(IPR{j}), 'o-',...
+        plot( varied_var_values{j},IPR_smooth{j}, 'o-',...
             'LineWidth', options.LineWidth,...
             'Color',cmap(j,:));
 %         set(gca,'yscale','log');
