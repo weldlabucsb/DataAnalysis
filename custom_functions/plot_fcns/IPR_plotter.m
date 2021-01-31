@@ -1,37 +1,20 @@
-function [fig_handle, fig_filename] = QCQKR_fwhm_plot(RunDatas,varied_variable_name,legendvars,varargin,options)
+function [fig_handle, fig_filename] = IPR_plotter(RunDatas,RunVars,options)
 % PLOTFUNCTIONTEMPLATE makes a plot from the given RunDatas against the
 % dependent variable {varied_variable_name}. Optional arguments are passed
 % to setupPlot, which automatically puts axes and a legend on the plot,
 % resizes the axes, etc.
 % 
-%         I recommend starting out by not touching the optional arguments.
-%
-% The RunDatas input can either be a single RunData object, or a cell array
-% of RunData objects.
-%
-% varied_variable_name is the cicero variable name (as a string) of the
-% independent variable for the RunDatas you've provided.
-%
-% legendvars must be specified as a cell array of strings. The names of
-% the variables are used as the title of the legend, and their values for
-% each plotted RunData are added to the legend.
-%
-% varargin can be provided as a cell array of cicero variable names which
-% are held constant across ALL RunDatas provided in the set. These
-% variables (and their values) are added to the plot title. 
-%
-%       For variables held constant in just one RunData out of the provided
-%       set (such as the 915 depth when plotting widths of many runs vs.
-%       time on the same axes), specify those variables in legendvars so
-%       that the runs will be labeled in the legend.
+
+
+%%%%%Note %%%%%%%%%%
+%unlike the rest of the functions I made this one work so that just RunVars
+%is an input to avoid having to do unpackRunVars
+
+
 
 arguments
     RunDatas
-    varied_variable_name
-    legendvars
-end
-arguments (Repeating)
-    varargin
+    RunVars
 end
 arguments
     options.LineWidth (1,1) double = 1.5
@@ -39,7 +22,7 @@ arguments
     options.yLabel string = ""
     options.yUnits string = ""
     %
-    options.xLabel string = varied_variable_name
+    options.xLabel string = RunVars.varied_var;
     options.xUnits string = ""
     %
     options.FontSize (1,1) double = 20
@@ -59,7 +42,9 @@ arguments
     %
     options.PlotPadding = 0;
 end
-
+varied_variable_name = RunVars.varied_var;
+legendvars = RunVars.heldvars_each;
+varargin = {RunVars.heldvars_all};
 % [varied_var, ...
 %  heldvars_each, ...
 %  heldvars_all, ...
@@ -139,34 +124,34 @@ end
         
         for ii = 1:size(avg_atomdata{j}, 2)
             %find the center information
+            norm_distr = (avg_atomdata{j}(ii).summedODy)./norm(avg_atomdata{j}(ii).summedODy);
+            
+            
             max_ratio{j}(ii) = mean(abs(avg_atomdata{j}(ii).summedODy),'all')/max(abs(avg_atomdata{j}(ii).summedODy),[],'all');
-            [width, center] = fracWidth( X{j}, avg_atomdata{j}(ii).summedODy, frac);
+%             [width, center] = fracWidth( X{j}, avg_atomdata{j}(ii).summedODy, frac);
             if max_ratio{j}(ii) > cutoff
-                fracWidths{j}(ii) = NaN;
+                IPR{j}(ii) = NaN;
             else
-                fracWidths{j}(ii) = width;
+                IPR{j}(ii) = sum(abs(norm_distr).^4);
             end
-            x2FromCen{j} = (X{j} - center).^2;
-            rms{j}(ii) = sqrt(trapz(x2FromCen{j}.*(avg_atomdata{j}(ii).summedODy./norm(avg_atomdata{j}(ii).summedODy)).^2));
-            peak_density{j}(ii) = avg_atomdata{j}(ii).RawMaxPeak3Density;
+            IPR_nosort{j}(ii) = sum(abs(norm_distr).^4);
             
         end
     end
     %%% End Data Manipulation %%%
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     
-    % Add a data interpolation to identify localization transition
     interp_points = linspace(0,5,100);
-    smoth_method = 'movmean';
     for j = 1:length(RunDatas)
-        fracWidths_interp{j} = interp1(varied_var_values{j},smoothdata(fracWidths{j},smoth_method),interp_points,'linear');
+        IPR_interp{j} = interp1(varied_var_values{j},smoothdata(IPR_nosort{j}),interp_points,'linear');
     end
     
     % Then plot things, just looping over the values I computed above.
     
-    figure_title_dependent_var = ['width at ' num2str(frac) ' maximum (summedODy, au)'];
+    figure_title_dependent_var = ['IPR ($\sum | \psi(x)|^4$)'];
+    first_fig = figure(1);
     for j = 1:length(RunDatas)
-        plot( varied_var_values{j}, fracWidths{j}, 'o-',...
+        plot( varied_var_values{j}, smoothdata(IPR{j}), 'o-',...
             'LineWidth', options.LineWidth,...
             'Color',cmap(j,:));
 %         set(gca,'yscale','log');
@@ -174,94 +159,59 @@ end
     end
     hold off;
     
+    secfigure_title_dependent_var = ['IPR ($\sum | \psi(x)|^4$)'];
     sec_fig = figure(2);
-    sec_figure_title_dependent_var = 'peak density ratio';
-    hold on;
     for j = 1:length(RunDatas)
-        plot( varied_var_values{j}, max_ratio{j}, 'o-',...
+        plot( varied_var_values{j}, smoothdata(IPR_nosort{j}), 'o-',...
             'LineWidth', options.LineWidth,...
             'Color',cmap(j,:));
 %         set(gca,'yscale','log');
+        hold on;
     end
-    plot(varied_var_values{1},cutoff.*ones(length(varied_var_values{1}),1),'k-',...
-        'LineWidth',4);
     hold off;
     
+        thirdfigure_title_dependent_var = ['IPR ($\sum | \psi(x)|^4$)'];
     third_fig = figure(3);
-    third_figure_title_dependent_var = ['Interpolated width at ' num2str(frac) ' maximum (summedODy, au)'];
-    hold on;
     for j = 1:length(RunDatas)
-        plot(interp_points, fracWidths_interp{j}, '-',...
+        plot(interp_points, IPR_interp{j}, '-',...
             'LineWidth', options.LineWidth,...
             'Color',cmap(j,:));
 %         set(gca,'yscale','log');
+        hold on;
     end
-%     ylim([0,160]);
     hold off;
     
-    
-    fourth_fig = figure(4);
-    fourth_figure_title_dependent_var = ['Derivative of Width'];
-    hold on;
-    for j = 1:length(RunDatas)
-        plot(interp_points(1:length(interp_points)-1),smoothdata(diff(fracWidths_interp{j})), '-',...
-            'LineWidth', options.LineWidth,...
-            'Color',cmap(j,:));
-%         set(gca,'yscale','log');
-    end
-%     ylim([0,160]);
-    hold off;
-    
-    % Finally, to take advantage of a lot of the automation I've built
-    % around the RunData objects, you need to copy-paste the following. You
-    % shouldn't have to change anything here, unless (obviously) you used
-    % different variable names for the figure_title_dependent_var or
-    % fig_handle.
     options.yLabel = figure_title_dependent_var;
     [plot_title, fig_filename] = ...
         setupPlotWrap( ...
-            fig_handle, ...
+            first_fig, ...
             options, ...
             RunDatas, ...
             figure_title_dependent_var, ...
             varied_variable_name, ...
             legendvars, ...
             varargin);
-        options.yLabel = sec_figure_title_dependent_var;
-        [plot_title2, fig_filename2] = ...
+        
+    options.yLabel = secfigure_title_dependent_var;
+    [plot_title, fig_filename] = ...
         setupPlotWrap( ...
             sec_fig, ...
             options, ...
             RunDatas, ...
-            sec_figure_title_dependent_var, ...
+            figure_title_dependent_var, ...
             varied_variable_name, ...
             legendvars, ...
             varargin);
-    
         
-        options.yLabel = third_figure_title_dependent_var;
-        [plot_title2, fig_filename2] = ...
+    options.yLabel = thirdfigure_title_dependent_var;
+    [plot_title, fig_filename] = ...
         setupPlotWrap( ...
             third_fig, ...
             options, ...
             RunDatas, ...
-            third_figure_title_dependent_var, ...
+            figure_title_dependent_var, ...
             varied_variable_name, ...
             legendvars, ...
             varargin);
-        
-        options.yLabel = fourth_figure_title_dependent_var;
-        [plot_title2, fig_filename2] = ...
-        setupPlotWrap( ...
-            fourth_fig, ...
-            options, ...
-            RunDatas, ...
-            fourth_figure_title_dependent_var, ...
-            varied_variable_name, ...
-            legendvars, ...
-            varargin);
-    % Note that the setupPlot function outputs a figure filename to be used
-    % when saving the figure. It will include the run numbers, dates, and
-    % the independent variable and held variable names/values.
     
 end
