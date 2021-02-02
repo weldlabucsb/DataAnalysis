@@ -112,6 +112,9 @@ varargin = {RunVars.heldvars_all};
     
     cutoff = 0.2;
     frac = 0.55;
+    lambdas = zeros(0);
+    Ts = zeros(0);
+    IPRvec = zeros(0);
     for j = 1:length(RunDatas)
         
         % Here I compute each fracWidth from the repeat-averaged densities
@@ -124,40 +127,45 @@ varargin = {RunVars.heldvars_all};
         
         
         PrimaryLatticeDepthVar = 'VVA1064_Er'; %Units of Er of the primary lattice
-        SecondaryLatticeVVAVar = 'Lattice915VVA'; %Units of Er of the secondary lattice
         atomdata = RunDatas{j}.Atomdata;
         for ii = 1:size(avg_atomdata{j}, 2)
             %do delta and J calculations
             s1 = atomdata(ii).vars.(PrimaryLatticeDepthVar);
             
-            secondaryPDPulseAmp = atomdata(ii).vars.('Scope_CH2_V0');
             
-            secondaryErPerVolt = atomdata(ii).vars.ErPerVolt915;  % Calibration from KD for the secondary lattice            
-            secondaryPDGain = atomdata(ii).vars.PDGain915;  % Gain on PD
-
-            s2 = secondaryPDPulseAmp*secondaryErPerVolt/secondaryPDGain;
+            if(isfield(atomdata(ii).vars,'ErPerVolt915'))
+%                 disp('ErPerVolt915 Exists!')
+                secondaryErPerVolt = atomdata(ii).vars.ErPerVolt915;  % Calibration from KD for the secondary lattice 
+            else
+%                 disp('ErPerVolt915 Doesn''t exist')
+                %got from KD on 1/5
+                secondaryErPerVolt = 22.34;
+            end
+            secondaryPDGain = 10; 
+            if(isfield(atomdata(ii).vars,'Scope_CH2_V0'))
+%                 disp('scope variable exists')
+                secondaryPDPulseAmp = atomdata(ii).vars.('Scope_CH2_V0');
+                secondaryPDGain = atomdata(ii).vars.PDGain915;  % Gain on PD
+                s2 = secondaryPDPulseAmp*secondaryErPerVolt/secondaryPDGain;
+            else
+%                 disp('scope variable doesn''t exist')
+                s2 = vva_to_voltage(atomdata(ii).vars.Lattice915VVA)*secondaryErPerVolt/secondaryPDGain;
+%                 s2 = secondaryErPerVolt*vva_to_voltage(atomdata(ii).vars.Lattice915VVA);
+            end
+            la1 = 1064;
+            la2 = 915;
             
-            la1 = PrimaryWavelength;
-            la2 = SecondaryWavelength;
-            
-            [J, Delta]  = J_Delta_Numeric(s1,s2,la1,la2,0);
-            DeltaPerJ = Delta/J;
-            % IF THIS THROWS AN ERROR, it's probably because the folder
-            % AubryAndre_J_and_Delta_from_Lattice  needs to be added to the
-            % path.  It's in the StrontiumData\Image Analysis Software
-            % folder
-            
-            % Setting tau as full width half max of trapezoidal pulse
-            tau_us = 1e6*(atomdata(ii).vars.('Scope_CH2_t2') - atomdata(ii).vars.('Scope_CH2_t1') - atomdata(ii).vars.('Scope_CH2_tr'));
+            [J, Delta]  = J_Delta_Gaussian(s1,s2,la1,la2);
             
             hbar_Er1064 = 7.578e-5; %Units of Er*seconds
             hbar_Er1064_us = 75.78; %hbar in units of Er*microseconds
             
+            tau_us = RunDatas{j}.ncVars.tau;
             tau = tau_us*J/hbar_Er1064_us;
             
-            
-            Lambda{j}(ii) = Delta*tau/J;
-            
+            T_us = RunDatas{j}.ncVars.T;
+            lambdas(length(lambdas)+1)  = Delta*tau/J;
+            Ts(length(Ts)+1) = T_us*J/hbar_Er1064_us;
             %normalize ODy distribution
             norm_distr = (avg_atomdata{j}(ii).summedODy)./norm(avg_atomdata{j}(ii).summedODy);
             
@@ -173,22 +181,68 @@ varargin = {RunVars.heldvars_all};
             
         end
         IPR_smooth{j} = smoothdata(IPR_smooth{j});
+        IPRvec = [IPRvec IPR_smooth{j}];
     end
     %%% End Data Manipulation %%%
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     
     % Then plot things, just looping over the values I computed above.
     
-    figure_title_dependent_var = ['IPR ($\sum | \psi(x)|^4$)'];
+    figure_title_dependent_var = ['IPR-ish ($\sum | \psi(x)|^8$)'];
     first_fig = figure(1);
     for j = 1:length(RunDatas)
-        plot( varied_var_values{j},IPR_smooth{j}, 'o-',...
+        plot( varied_var_values{j}.*3.1./secondaryPDGain,IPR_smooth{j}, 'o-',...
             'LineWidth', options.LineWidth,...
             'Color',cmap(j,:));
 %         set(gca,'yscale','log');
         hold on;
     end
     hold off;
+    sec_fig = figure(2);
+    scatter3(lambdas,Ts,IPRvec);
+    xlabel('Lambda (unitless)');
+    ylabel('T (unitless)');
+    xlim([0,2*max(Ts)]);
+    ylim([0,max(Ts)]);
+    
+    % try data interpolation
+    third_fig = figure(3);
+    num_points = 50;
+    lambda_interp = repmat(linspace(0,2*max(Ts),num_points),1,num_points);
+    Ts_interp = repmat(linspace(0,max(Ts),num_points),num_points,1);
+    Ts_interp = Ts_interp(:)';
+    IPR_interp = griddata(lambdas,Ts,IPRvec,lambda_interp,Ts_interp);
+    scatter3(lambda_interp,Ts_interp,IPR_interp);
+    xlabel('Lambda (unitless)');
+    ylabel('T (unitless)');
+    
+    %add a contour plot
+    fourth_fig = figure(4);
+    num_points = 100;
+    lambda_vec = linspace(0,2*max(Ts),num_points);
+    Ts_vec = linspace(0,max(Ts),num_points)';
+    [lambda_grid,Ts_grid,IPR_interp] = griddata(lambdas,Ts,IPRvec,lambda_vec,Ts_vec);
+    hold on;
+    contourf(lambda_grid,Ts_grid,IPR_interp,10);
+    plot(linspace(0,2*max(Ts),30),0.5*linspace(0,2*max(Ts),30),'r-')
+    hold off;
+%     xlim([0,0.02])
+    xlabel('Lambda (unitless)');
+    ylabel('T (unitless)');
+    title('IPR (ish)');
+    
+    %and a surf plot
+    fifth_fig = figure(5);
+    num_points = 100;
+    lambda_vec = linspace(min(lambdas),max(lambdas),num_points);
+    Ts_vec = linspace(min(Ts),max(Ts),num_points)';
+    [lambda_grid,Ts_grid,IPR_interp] = griddata(lambdas,Ts,IPRvec,lambda_vec,Ts_vec);
+    surf(lambda_grid,Ts_grid,IPR_interp);
+%     xlim([0,0.02])
+    xlabel('Lambda (unitless)');
+    ylabel('T (unitless)');
+    title('IPR (ish)')
+    
     
     options.yLabel = figure_title_dependent_var;
     [plot_title, fig_filename] = ...
@@ -201,5 +255,11 @@ varargin = {RunVars.heldvars_all};
             legendvars, ...
             varargin);
         
+    function depth = vva_to_voltage(vva)
+        %take out the non-linearity
+        V0s = [0.016000,0.016000,0.0160000,0.0240000,0.0325363,0.053418,0.069453,0.088672,0.13093,0.17131,0.209423626,0.24634811,0.28175,0.2979424,0.3280,0.365530,0.38883,0.407439,0.43064,0.4452181,0.46755,0.49028,0.5083,0.516321,0.5290575,0.530246];
+        vvas = [0,1,1.5000000,1.6000,1.700,1.800,1.90000,2,2.2000,2.4000,2.60000,2.8000,3,3.100000,3.30000,3.600000,3.8000,4,4.2000,4.400000,4.700000,5,5.50000,6,7,8];
+        depth = interp1(vvas,V0s,vva);
+    end
 
 end

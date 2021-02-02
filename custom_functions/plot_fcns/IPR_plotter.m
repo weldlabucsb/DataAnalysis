@@ -126,6 +126,8 @@ varargin = {RunVars.heldvars_all};
             %find the center information
             norm_distr = (avg_atomdata{j}(ii).summedODy)./norm(avg_atomdata{j}(ii).summedODy);
             
+            norm_wavefunc = (avg_atomdata{j}(ii).summedODy)./norm(avg_atomdata{j}(ii).summedODy,1);
+            
             
             max_ratio{j}(ii) = mean(abs(avg_atomdata{j}(ii).summedODy),'all')/max(abs(avg_atomdata{j}(ii).summedODy),[],'all');
 %             [width, center] = fracWidth( X{j}, avg_atomdata{j}(ii).summedODy, frac);
@@ -134,7 +136,7 @@ varargin = {RunVars.heldvars_all};
             else
                 IPR{j}(ii) = sum(abs(norm_distr).^4);
             end
-            IPR_nosort{j}(ii) = sum(abs(norm_distr).^4);
+            IPR_nosort{j}(ii) = sum(abs(norm_wavefunc).^2);
             
         end
     end
