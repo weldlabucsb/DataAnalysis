@@ -234,8 +234,8 @@ varargin = {RunVars.heldvars_all};
     %and a surf plot
     fifth_fig = figure(5);
     num_points = 100;
-    lambda_vec = linspace(min(lambdas),max(lambdas),num_points);
-    Ts_vec = linspace(min(Ts),max(Ts),num_points)';
+    lambda_vec = linspace(0,2*max(Ts),num_points);
+    Ts_vec = linspace(0,max(Ts),num_points)';
     [lambda_grid,Ts_grid,IPR_interp] = griddata(lambdas,Ts,IPRvec,lambda_vec,Ts_vec);
     surf(lambda_grid,Ts_grid,IPR_interp);
 %     xlim([0,0.02])
