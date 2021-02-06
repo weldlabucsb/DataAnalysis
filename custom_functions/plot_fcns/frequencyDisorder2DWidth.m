@@ -1,4 +1,4 @@
-function [fig_handle, fig_filename] = frequencyDisorder2D(RunDatas,RunVars,options)
+function [fig_handle, fig_filename] = frequencyDisorder2DWidth(RunDatas,RunVars,options)
 % PLOTFUNCTIONTEMPLATE makes a plot from the given RunDatas against the
 % dependent variable {varied_variable_name}. Optional arguments are passed
 % to setupPlot, which automatically puts axes and a legend on the plot,
@@ -95,7 +95,7 @@ varargin = {RunVars.heldvars_all};
     % different traces (with default, more than 5 traces will start
     % repeating colors).
     
-    fig_handle = figure(1);
+    first_fig = figure(1);
     cmap = colormap( jet( length(RunDatas) ) );
     
     % I also typically define here the dependent variable string that will
@@ -111,10 +111,11 @@ varargin = {RunVars.heldvars_all};
     % repeat-averaged each set within itself.
     
     cutoff = 0.2;
-    frac = 0.55;
+    frac = 0.8;
     lambdas = zeros(0);
     Ts = zeros(0);
     IPRvec = zeros(0);
+    fracWidthsvec = zeros(0);
     for j = 1:length(RunDatas)
         
         % Here I compute each fracWidth from the repeat-averaged densities
@@ -140,7 +141,6 @@ varargin = {RunVars.heldvars_all};
 %                 disp('ErPerVolt915 Doesn''t exist')
                 %got from KD on 1/5
                 secondaryErPerVolt = 22.34;
-%                 disp('yeet')
             end
             secondaryPDGain = 10; 
             if(isfield(atomdata(ii).vars,'Scope_CH2_V0'))
@@ -172,80 +172,62 @@ varargin = {RunVars.heldvars_all};
             
             
             max_ratio{j}(ii) = mean(abs(avg_atomdata{j}(ii).summedODy),'all')/max(abs(avg_atomdata{j}(ii).summedODy),[],'all');
-%             [width, center] = fracWidth( X{j},
-%             avg_atomdata{j}(ii).summedODy, frac);
-            if(0)%set to 1 if excluding low atom runs
-                if max_ratio{j}(ii) > cutoff
-                    IPR_smooth{j}(ii) = NaN;
-                else
-                    IPR_smooth{j}(ii) = sum(abs(norm_distr).^4);
-                end
+            [width, center] = fracWidth( X{j}, avg_atomdata{j}(ii).summedODy, frac);
+            if max_ratio{j}(ii) > cutoff
+                fracWidths{j}(ii) = NaN;
             else
-                IPR_smooth{j}(ii) = sum(abs(norm_distr).^4);
+                fracWidths{j}(ii) = width;
             end
+            fracWidths{j}(ii) = width;
+%             fracWidths{j}(ii) = width;
             
-            
-            
-            if(0)%set to one if using actual IPR
-                norm_wavefunc = (avg_atomdata{j}(ii).summedODy)./norm(avg_atomdata{j}(ii).summedODy,1);
-                IPR_smooth{j}(ii) = sum(abs(norm_wavefunc).^2);
-            end
         end
-        IPR_smooth{j} = smoothdata(IPR_smooth{j});
-        
-        IPRvec = [IPRvec IPR_smooth{j}];
+        fracWidths{j} = smoothdata(fracWidths{j});
+        fracWidthsvec = [fracWidthsvec fracWidths{j}];
     end
     %%% End Data Manipulation %%%
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     
     % Then plot things, just looping over the values I computed above.
     
-    figure_title_dependent_var = ['IPR-ish ($\sum | \psi(x)|^8$)'];
-    first_fig = figure(1);
+    figure_title_dependent_var = ['width at ' num2str(frac) ' maximum (summedODy, au)'];
     for j = 1:length(RunDatas)
-        plot( varied_var_values{j}.*3.1./secondaryPDGain,IPR_smooth{j}, 'o-',...
+        plot( varied_var_values{j}, fracWidths{j}, 'o-',...
             'LineWidth', options.LineWidth,...
             'Color',cmap(j,:));
 %         set(gca,'yscale','log');
         hold on;
     end
     hold off;
-    sec_fig = figure(2);
-    scatter3(lambdas,Ts,IPRvec);
+    
+        sec_fig = figure(2);
+    scatter3(lambdas,Ts,fracWidthsvec);
     xlabel('Lambda (unitless)');
     ylabel('T (unitless)');
-    title('NON-Interpolated IPR(ish) Data Scatter plot')
+    title('FWHM')
     xlim([0,2*max(Ts)]);
     ylim([0,max(Ts)]);
     
-    yeet_fig = figure(1234);
-    scatter3(lambdas,Ts,IPRvec);
-    xlabel('Lambda (unitless)');
-    ylabel('T (unitless)');
-    title('NON-Interpolated IPR(ish) Data Scatter plot')
-%     xlim([0,2*max(Ts)]);
-%     ylim([0,max(Ts)]);
-    
-    % try data interpolation
+        % try data interpolation
     third_fig = figure(3);
     num_points = 50;
     lambda_interp = repmat(linspace(0,2*max(Ts),num_points),1,num_points);
     Ts_interp = repmat(linspace(0,max(Ts),num_points),num_points,1);
     Ts_interp = Ts_interp(:)';
-    IPR_interp = griddata(lambdas,Ts,IPRvec,lambda_interp,Ts_interp);
-    scatter3(lambda_interp,Ts_interp,IPR_interp);
+    FWHM_interp = griddata(lambdas,Ts,fracWidthsvec,lambda_interp,Ts_interp);
+    scatter3(lambda_interp,Ts_interp,FWHM_interp);
     xlabel('Lambda (unitless)');
     ylabel('T (unitless)');
     title('Interpolated IPR(ish) Data Scatter Plot');
     
-    %add a contour plot
+        %add a contour plot
     fourth_fig = figure(4);
     num_points = 100;
     lambda_vec = linspace(0,2*max(Ts),num_points);
     Ts_vec = linspace(0,max(Ts),num_points)';
-    [lambda_grid,Ts_grid,IPR_interp] = griddata(lambdas,Ts,IPRvec,lambda_vec,Ts_vec);
+    [lambda_grid,Ts_grid,FWHM_interp] = griddata(lambdas,Ts,fracWidthsvec,lambda_vec,Ts_vec);
     hold on;
-    contourf(lambda_grid,Ts_grid,IPR_interp,10);
+    contourf(lambda_grid,Ts_grid,FWHM_interp,10);
     plot(linspace(0,2*max(Ts),30),0.5*linspace(0,2*max(Ts),30),'r-')
     hold off;
 %     xlim([0,0.02])
@@ -253,13 +235,14 @@ varargin = {RunVars.heldvars_all};
     ylabel('T (unitless)');
     title('Interpolated IPR(ish) Contour');
     
+
     %and a surf plot
     fifth_fig = figure(5);
     num_points = 100;
     lambda_vec = linspace(0,2*max(Ts),num_points);
     Ts_vec = linspace(0,max(Ts),num_points)';
-    [lambda_grid,Ts_grid,IPR_interp] = griddata(lambdas,Ts,IPRvec,lambda_vec,Ts_vec);
-    surf(lambda_grid,Ts_grid,IPR_interp);
+    [lambda_grid,Ts_grid,FWHM_interp] = griddata(lambdas,Ts,fracWidthsvec,lambda_vec,Ts_vec);
+    surf(lambda_grid,Ts_grid,FWHM_interp);
 %     xlim([0,0.02])
     xlabel('Lambda (unitless)');
     ylabel('T (unitless)');
