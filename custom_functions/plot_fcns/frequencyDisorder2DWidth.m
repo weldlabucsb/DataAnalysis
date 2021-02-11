@@ -248,6 +248,11 @@ varargin = {RunVars.heldvars_all};
     ylabel('T (unitless)');
     title('IPR (ish)')
     
+    %and a pcolor plot
+%     sixth_fig = figure(6);
+%     F = factor(numel(lambdas));
+%     pcolor(reshape(lambdas,F(1),numel(lambdas)/F(1)),reshape(Ts,F(1),numel(lambdas)/F(1)),reshape(fracWidthsvec,F(1),numel(lambdas)/F(1)));
+    %the pcolor plot was shit; I'll have to figure something out
     
     options.yLabel = figure_title_dependent_var;
     [plot_title, fig_filename] = ...
