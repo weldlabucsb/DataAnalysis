@@ -65,11 +65,12 @@ function [width, center, peakLeftEdge, peakRightEdge, thisFracWidthHeight] = fra
     width = peakRightEdge - peakLeftEdge;
     
     if options.PlotWidth
-       hFrac = figure();
+       hFrac = figure(14);
        plot(x,y);
-       hold on
+       hold on;
        line([peakLeftEdge peakRightEdge], thisFracWidthHeight * [1 1]);
-       set(hFrac,'Position',options.Position);
+%        set(hFrac,'Position',options.Position);
+       hold off;
     end
     
     function [avgMaxValue, peakIndex, centerX] = averageAroundMaximum(x,y,radius)
